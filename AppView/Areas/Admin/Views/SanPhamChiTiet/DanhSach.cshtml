@@ -1,0 +1,102 @@
+﻿@model IEnumerable<AppData.Entities.Models.SanPhamChiTiet>
+
+@{
+    ViewData["Title"] = "DanhSach";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1>DanhSach</h1>
+
+<p>
+    <a href="~/Admin/SanPhamChiTiet/Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SanPham.TenSanPham)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Size.SizeNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MauSac.TenMauSac)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ThuongHieu.TenThuongHieu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaSPCT)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SoLuong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GiaBan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoaiSanPham)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MoTa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QrImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrangThai)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDSP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDMauSac)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDThuongHieu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaSPCT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SoLuong)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GiaBan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoaiSanPham)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MoTa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QrImage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TrangThai)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Update", new {  /*id=item.ID */ }) |
+                    @Html.ActionLink("Details", "SanPhamChiTietDetail", new {  /*id=item.ID */ }) |
+                @Html.ActionLink("Delete", "Delete", new {  /*id=item.ID*/  })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

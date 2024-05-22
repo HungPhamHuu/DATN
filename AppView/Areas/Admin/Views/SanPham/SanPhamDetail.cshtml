@@ -1,0 +1,47 @@
+﻿@model AppData.Entities.Models.SanPham
+
+@{
+    ViewData["Title"] = "SanPhamDetail";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    div#lstVoucher {
+        display: none;
+    }
+</style>
+<div>
+    <hr />
+    <dl class="row" >
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TenSanPham)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TenSanPham)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TrangThai)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TrangThai)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.KhoiLuong)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.KhoiLuong)
+        </dd>
+        <div>
+            @Html.ActionLink("Edit", "Update", new { id = Model.ID })
+            <a href="~/Admin/SanPham/DanhSach">Quay lại</a>
+        </div>
+    </dl>
+</div>
+

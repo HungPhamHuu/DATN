@@ -1,0 +1,268 @@
+﻿@model IEnumerable<AppData.Entities.Models.NguoiDung>
+
+@{
+    ViewData["Title"] = "Danh sách nhân viên";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var stt = 0;
+    stt++;
+    var lstrole = ViewBag.lstrole;
+}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link href="~/css/layout/adminlte.min.css" rel="stylesheet" />
+<link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" />
+
+<style>
+    .badge-error {
+        color: #fff;
+        background-color: #dd4444;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+    a:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+    .pagination-button {
+        background-color: #f0f0f0; /* Màu nền mặc định cho các nút */
+        border-color: #f0f0f0;
+        color: black; /* Màu chữ mặc định cho các nút */
+    }
+
+        .pagination-button.current {
+            background-color: #44b6e1; /* Màu nền cho nút hiện tại */
+            border-color: #44b6e1;
+            color: white; /* Màu chữ cho nút hiện tại */
+        }
+
+    button {
+        margin-left: 2%;
+    }
+</style>
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1></h1>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<div class="row">
+    <div class="col-md-5">
+        <div class="row">
+            <div class="col-md-10">
+                <input type="text" id="tukhoa" name="tukhoa" placeholder="Từ khóa" style="height : 40px; width: 100%; border-radius:10px;margin-left: 8px;margin-bottom: 10px;" />
+            </div>
+            <div class="col-md-2">
+                <button onclick="TimkiemNhanVienTheoTuKhoa();" class="btn btn-primary" style="border-radius:5px; margin-left: 5px;">Search</button>
+            </div>
+        </div>
+    </div>
+    @*Lọc theo trạng thái*@
+    <div class="col-md-3">
+        <div class="row">
+            <label class="control-label col-md-4">Trạng thái: </label>
+            <div class="col-md-8">
+                <select id="trangthaiNhanVienFilter" name="trangthaiFilter" class="form-control">
+                    <option value="-1">All</option>
+                    <option value="0">Không hoạt động</option>
+                    <option value="1">Hoạt động</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    @*Lọc theo chức vụ*@
+    <div class="col-md-4">
+        <div class="row">
+            <label class="control-label col-md-4">Chức vụ: </label>
+            <div class="col-md-8">
+                <select id="ChucVuFilter" name="ChucVuFilter" class="form-control">
+                    <option value="-1">All</option>
+                    @if (lstrole == null)
+                    {
+
+                    }
+                    else
+                    {
+                        foreach (var role in lstrole)
+                        {
+                            <option value="@role.Id">@role.TenChucVu</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+</div>
+<section class="content">
+    <div class="card-header">
+        <h3 style="font-weight: bolder;float: left;">Danh sách Nhân viên</h3>
+        <div style="float: right;">
+            <a href="~/Admin/QLNguoiDung/DangKyNhanVien" style="right: 1%;position: absolute;" class="btn btn-primary"><i class="fas fa-plus-square" style="color: #ffffff;"></i> Thêm mới</a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-striped projects">
+            <thead>
+                <tr class="table-active">
+                    <th style="width: 1%">
+                        STT
+                    </th>
+                    <th style="width: 20%">
+                        Họ và tên
+                    </th>
+                    <th style="width:10%">
+                        Ảnh
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Số điện thoại
+                    </th>
+                    <th style="width: 8%" class="text-center">
+                        Trạng thái
+                    </th>
+                    <th style="width: 20%">
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="table-user">
+            </tbody>
+        </table>
+        <div class="pagination" id="pagination" style="margin: auto;margin-top: 2%;width: 400px;;margin-bottom:2%;">
+            <button onclick="previousPage()">Previous</button>
+            <!-- Số trang sẽ được thêm vào đây bằng JavaScript -->
+            <button onclick="nextPage()">Next</button>
+        </div>
+    </div>
+    </div>
+
+</section>
+<script src="~/js/danhsachsanpham/jquery/jquery.min.js"></script>
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/layout/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/adminlte.js"></script>
+<script type="text/javascript" src="~/js/nguoidung/qlnguoidung.js"></script>
+<script type="text/javascript">
+    DanhSachNhanVien();
+    PhanTrangNhanVien();
+    function PhanTrangNhanVien() {
+        const rowsPerPage = 15;
+        const allRows = document.querySelectorAll("#SanphamChuaSale tr");
+        let currentPage = 0;
+        showPage(0);
+
+        function showPage(pageIndex) {
+            allRows.forEach(row => {
+                row.style.display = "none";
+            });
+
+            const startIndex = pageIndex * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+
+            for (let i = startIndex; i < endIndex; i++) {
+                if (allRows[i]) {
+                    allRows[i].style.display = "table-row";
+                }
+            }
+
+            currentPage = pageIndex;
+            renderPaginationButtons();
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                showPage(currentPage - 1);
+            }
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            if (currentPage < totalPages - 1) {
+                showPage(currentPage + 1);
+            }
+        }
+
+        function renderPaginationButtons() {
+            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            const paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = "";
+
+            const prevButton = document.createElement("button");
+            prevButton.textContent = "Previous";
+            prevButton.onclick = previousPage;
+            prevButton.classList.add("pagination-button");
+            paginationContainer.appendChild(prevButton);
+
+            if (totalPages <= 5) {
+                for (let i = 0; i < totalPages; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i + 1;
+                    pageButton.onclick = () => showPage(i);
+                    pageButton.classList.add("pagination-button");
+                    if (i === currentPage) {
+                        pageButton.classList.add("current");
+                    }
+                    paginationContainer.appendChild(pageButton);
+                }
+            } else {
+                let startPage, endPage;
+                if (currentPage <= 2) {
+                    startPage = 0;
+                    endPage = 4;
+                } else if (currentPage >= totalPages - 3) {
+                    startPage = totalPages - 5;
+                    endPage = totalPages - 1;
+                } else {
+                    startPage = currentPage - 2;
+                    endPage = currentPage + 2;
+                }
+
+                if (startPage > 0) {
+                    const ellipsisStart = document.createElement("button");
+                    ellipsisStart.textContent = "...";
+                    ellipsisStart.disabled = true;
+                    ellipsisStart.classList.add("pagination-button");
+                    paginationContainer.appendChild(ellipsisStart);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i + 1;
+                    pageButton.onclick = () => showPage(i);
+                    pageButton.classList.add("pagination-button");
+                    if (i === currentPage) {
+                        pageButton.classList.add("current");
+                    }
+                    paginationContainer.appendChild(pageButton);
+                }
+
+                if (endPage < totalPages - 1) {
+                    const ellipsisEnd = document.createElement("button");
+                    ellipsisEnd.textContent = "...";
+                    ellipsisEnd.disabled = true;
+                    ellipsisEnd.classList.add("pagination-button");
+                    paginationContainer.appendChild(ellipsisEnd);
+                }
+            }
+
+            const nextButton = document.createElement("button");
+            nextButton.textContent = "Next";
+            nextButton.onclick = nextPage;
+            nextButton.classList.add("pagination-button");
+            paginationContainer.appendChild(nextButton);
+        }
+
+        return;
+    }
+</script>

@@ -1,0 +1,543 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpAccess
+@using Microsoft.AspNetCore.Http;
+@using AppData.Session;
+@using System.Text;
+
+@{
+    //Lấy chức vụ
+    var roleBytes = httpAccess.HttpContext.Session.GetString("chucvu");
+    var ten = httpAccess.HttpContext.Session.GetString("Tennguoidung");
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Animate.css -->
+    <link href="~/css/layout/animate.css" rel="stylesheet" />
+    <!-- Icomoon Icon Fonts-->
+    <link href="~/css/layout/icomoon.css" rel="stylesheet" />
+    <!-- Ion Icon Fonts-->
+    <link href="~/css/layout/ionicons.min.css" rel="stylesheet" />
+    <!-- Bootstrap  -->
+    <link href="~/css/layout/bootstrap.min.css" rel="stylesheet" />
+    <!-- Owl Carousel -->
+    <link href="~/css/layout/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/css/layout/owl.theme.default.min.css" rel="stylesheet" />
+
+    <!-- Magnific Popup -->
+    <link href="~/css/layout/magnific-popup.css" rel="stylesheet" />
+
+    <!-- Flexslider  -->
+    <link href="~/css/layout/flexslider.css" rel="stylesheet" />
+    <!-- Date Picker -->
+    <link href="~/css/layout/bootstrap-datepicker.css" rel="stylesheet" />
+    <!-- Flaticons  -->
+    <link href="~/css/layout/fontawesome/flaticon.css" rel="stylesheet" />
+    <!-- Theme style  -->
+    <link href="~/css/layout/style.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .colorlib-nav ul li.has-dropdown .dropdown {
+            top: 5px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .menu-1 ul li a {
+            color: #ffffff !important;
+        }
+
+            .menu-1 ul li a:hover {
+                background-color: #88c8bc;
+            }
+
+        .menu-1 ul li ul li a:hover {
+            background-color: #88c8bc;
+        }
+
+        body {
+            font-family: system-ui;
+        }
+
+        ul.slides {
+            margin-top: 235px;
+        }
+
+        i.fas.fa-user-circle {
+            font-size: 33px;
+            margin-top: 48%;
+            margin-left: 0%;
+        }
+
+        li.has-dropdown.cart {
+            margin-right: 69%;
+        }
+
+        i.fas.fa-shopping-cart {
+            margin-left: 35px;
+            margin-top: -25%;
+            color: white;
+            font-size: 30px;
+        }
+
+        p#soluongtrongiohang {
+            margin-left: -8px;
+            margin-top: -26%;
+            font-size: 11px;
+        }
+
+        #colorlib-footer .colorlib-widget h4 {
+            color: #ffffff;
+        }
+
+        #colorlib-footer .colorlib-widget .colorlib-footer-links li a {
+            color: #ffffff;
+        }
+
+        #colorlib-footer .colorlib-social-icons li a {
+            color: #ffffff;
+        }
+
+        #colorlib-footer .footer-col h4 {
+            color: #ffffff;
+        }
+
+        #colorlib-footer .footer-col .colorlib-footer-links li a {
+            color: #ffffff;
+        }
+
+        #colorlib-footer p {
+            color: #ffffff;
+        }
+
+        .footer-col li {
+            color: #ffffff;
+        }
+
+        i.fas.fa-user-circle {
+            font-size: 33px;
+            margin-top: 48%;
+        }
+
+        .img-voucher, card-body {
+            margin-top: 5px;
+        }
+
+        .card.col-md-6 {
+            margin: 0px 50px 50px 50px;
+        }
+
+        h5.card-title {
+            color: black;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="colorlib-loader"></div>
+    <div id="page" style="font-family: none;font-size: 16px; margin-top: 10%;">
+        <nav class="colorlib-nav" role="navigation" style="position: fixed; top: 0;width: 100%;z-index: 1000;">
+            <div class="top-menu" style="background: #88c8bc; background-image: url(https://intphcm.com/data/upload/poster-giay-just-do-it.jpg);background-repeat: no-repeat; background-size: cover;">
+                <div>
+                    <div class="row">
+                        <div class="col-sm-7 col-md-7">
+                            <div id="colorlib-logo"><a href="~/KhachHang/TrangChu/Index"><img src="~/imagelayout/logo.jpg" style="width: 10%;margin-left: 10%;; border-radius: 60%;" /></a></div>
+                        </div>
+                        <div class="col-sm-5 col-md-3">
+                            <form class="search-wrap">
+                                <div class="form-group" style="margin-top: 10%;">
+                                    <input type="search" id="tukhoa" class="form-control search" placeholder="Search">
+                                    <button class="btn submit-search text-center" onclick="TimKiem(event);">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-5 col-md-1 text-left menu-1">
+                            <ul>
+                                <li class="has-dropdown cart">
+                                    @if (roleBytes != null)
+                                    {
+                                        <a href="#" style="text-decoration:none; font-family: none;" class="lstthongtin">
+                                            <i class="fas fa-user-circle"></i>
+                                        </a>
+                                        <ul class="dropdown menulstthongtin" style=" top: 43px;width: 200px;left: 0px;">
+                                            @if (roleBytes != null)
+                                            {
+                                                if (roleBytes == "Khách hàng")
+                                                {
+                                                }
+                                                else
+                                                {
+                                                    <li><a class="dropdown-item" href="~/Admin/SanPhamChiTiet/GetProductDetails" style="text-decoration:none;"><i class="fas fa-clipboard-list"></i> Quản trị</a></li>
+                                                }
+                                            }
+
+                                            <li><a class="dropdown-item" href="~/KhachHang/HoaDonKH/DanhSachHoaDonTheoNguoiDungKH" style="text-decoration:none;"><i class="fas fa-file-invoice"></i> Lịch sử mua hàng</a></li>
+                                            <li><a class="dropdown-item" href="~/KhachHang/ThongTinCaNhan/ThongTinCaNhan" style="text-decoration:none;"><i class="fas fa-user-cog"></i> Thông tin cá nhân</a></li>
+                                            <li><a class="dropdown-item" href="~/KhachHang/VoucherKH/DanhSachVoucherTheoKhachHang" style="text-decoration:none;"><i class="fas fa-gift"></i> Voucher</a></li>
+                                            <li>
+                                                <a href="~/DangNhap/Logout" class="dropdown-item" style="font-family: ui-serif;font-size: 18px;" style="text-decoration:none;"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                                            </li>
+
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <a href="~/DangNhap/DanhNhap/" style="text-decoration:none;">
+                                            <i class="fas fa-user-circle" style="font-size: 30px;margin-left: -170%;margin-top: 50%;"></i>
+                                        </a>
+                                    }
+                                </li>
+                            </ul>
+                            @if (roleBytes != null)
+                            {
+                                <a class="dropdown-item" href="~/KhachHang/GioHang/GioHangChiTiet" style="display: flex;text-decoration:none;">
+                                    <i class="fas fa-shopping-cart"></i> <p id="soluongtrongiohang" class="badge bg-danger"></p>
+                                </a>
+                            }
+                            else
+                            {
+
+                            }
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-3 text-left menu-1">
+                            </div>
+                            <div class="col-sm-6 text-left menu-1">
+                                <ul>
+                                    <li class="active"><a href="~/KhachHang/TrangChu/Index" style="text-decoration:none; color:white !important">Home</a></li>
+                                    <li class="has-dropdown">
+                                        <a href="~/KhachHang/TrangChu/DanhSachSanPhamBan" style="text-decoration:none;">Sản phẩm</a>
+                                    </li>
+                                    @*  <li class="has-dropdown">
+                                    <a href="~/KhachHang/SaleKH/DanhSachSaleBan" style="text-decoration:none;">Sale</a>
+                                    </li> *@
+                                    @* <li class="has-dropdown">
+                                    <a href="~/Home/TimKiem" style="text-decoration:none;">Tìm kiếm</a>
+                                    </li> *@
+                                    <li class="has-dropdown">
+                                        <a href="" style="text-decoration:none;">Thương hiệu</a>
+                                        <ul class="dropdown" id="lstThuongHieu" style="top: 6px;width: 200px;">
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "Adidas" , area = "KhachHang"})" style="text-decoration:none;"> Adidas</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "New Balance" , area = "KhachHang"})" style="text-decoration:none;"> New Balance</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "Asics" , area = "KhachHang"})" style="text-decoration:none;"> Asics</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "Nike" , area = "KhachHang"})" style="text-decoration:none;"> Nike</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "Puma" , area = "KhachHang"})" style="text-decoration:none;"> Puma</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "Converse" , area = "KhachHang"})" style="text-decoration:none;"> Converse</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "Lacoste" , area = "KhachHang"})" style="text-decoration:none;"> Lacoste</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="has-dropdown">
+                                        <a href="" style="text-decoration:none;">Loại sản phẩm</a>
+                                        <ul class="dropdown" id="lstTheLoai" style="top: 6px;width: 200px;">
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoLoaisanpham","TrangChu" , new { loaisanpham = "Giày thể thao" , area = "KhachHang"})" style="text-decoration:none;"> Giày thể thao</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoLoaisanpham","TrangChu" , new { loaisanpham = "Giày tập luyện" , area = "KhachHang"})" style="text-decoration:none;"> Giày tập luyện</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoLoaisanpham","TrangChu" , new { loaisanpham = "Giày đi bộ" , area = "KhachHang"})" style="text-decoration:none;"> Giày đi bộ</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoLoaisanpham","TrangChu" , new { loaisanpham = "Giày đá bóng" , area = "KhachHang"})" style="text-decoration:none;"> Giày đá bóng</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("LocTheoLoaisanpham","TrangChu" , new { loaisanpham = "Giày chạy bộ" , area = "KhachHang"})" style="text-decoration:none;"> Giày chạy bộ</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-3 text-left menu-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sale" style="background-color:#f3efef">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 offset-sm-2 text-center">
+                            <div class="row">
+                                <div class="owl-carousel2">
+                                    <div class="item">
+                                    </div>
+                                    <div class="item">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <aside id="colorlib-hero">
+            <div class="flexslider">
+                <ul class="slides">
+                    <li style="background-image: url(https://file.hstatic.net/200000174405/collection/19238246_1997064527179566_5473797071884482645_o_ff15685be80c4d21973dcb914398e04f.jpg);">
+                        <div class="overlay"></div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-6 offset-sm-3 text-center slider-text">
+                                    <div class="slider-text-inner">
+                                        <div class="desc">
+                                            <h1 class="head-1">Men's</h1>
+                                            <h2 class="head-2">Shoes</h2>
+                                            <h2 class="head-3">Collection</h2>
+                                            <p class="category"><span>New trending shoes</span></p>
+                                            <p><a href="#" class="btn btn-primary">Shop Collection</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li style="background-image: url(https://theme.hstatic.net/1000402257/1000876467/14/ms_banner_img5.jpg?v=153);">
+                        <div class="overlay"></div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-6 offset-sm-3 text-center slider-text">
+                                    <div class="slider-text-inner">
+                                        <div class="desc">
+                                            <h1 class="head-1">Huge</h1>
+                                            <h2 class="head-2">Sale</h2>
+                                            <h2 class="head-3"><strong class="font-weight-bold">50%</strong> Off</h2>
+                                            <p class="category"><span>Big sale sandals</span></p>
+                                            <p><a href="#" class="btn btn-primary">Shop Collection</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li style="background-image: url(https://i1252.photobucket.com/albums/hh579/Shopburin/banner01_zpsddaf983d.jpg);">
+                        <div class="overlay"></div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-6 offset-sm-3 text-center slider-text">
+                                    <div class="slider-text-inner">
+                                        <div class="desc">
+                                            <h1 class="head-1">New</h1>
+                                            <h2 class="head-2">Arrival</h2>
+                                            <h2 class="head-3">up to <strong class="font-weight-bold">30%</strong> off</h2>
+                                            <p class="category"><span>New stylish shoes for men</span></p>
+                                            <p><a href="#" class="btn btn-primary">Shop Collection</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <div class="colorlib-intro">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <h2 class="intro">It started with a simple idea: Create quality, well-designed products that I wanted myself.</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="colorlib-product">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6 text-center">
+                        <div class="featured">
+                            <a href="#" class="featured-img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZjmRR16d9NG21t571n1mmzLxC6EJTjc6gCA&usqp=CAU);"></a>
+                            <div class="desc">
+                                <h2><a href="#" style="font-family: 'Font Awesome 5 Brands';text-decoration: none;">Shop Men's Collection</a></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <div class="featured">
+                            <a href="#" class="featured-img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSStf5WK9g5AXAe2G1i7h4mJJ1nlpHb9Q7vmw&usqp=CAU);"></a>
+                            <div class="desc">
+                                <h2><a href="#" style="font-family: 'Font Awesome 5 Brands';text-decoration: none;">Shop Women's Collection</a></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="lstVoucher" class="row">
+            </div>
+        </div>
+
+        <div>
+            @RenderBody()
+        </div>
+        <div class="colorlib-partner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
+                        <h2>Trusted Partners</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col partner-col text-center">
+                        <a href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "Adidas" , area = "KhachHang"})" style="text-decoration:none;">
+                            <img src="~/imagelayout/brand-1.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
+                        </a>
+                    </div>
+                    <div class="col partner-col text-center">
+                        <a href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "Nike" , area = "KhachHang"})" style="text-decoration:none;">
+                            <img src="~/imagelayout/brand-2.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
+                        </a>
+                    </div>
+                    <div class="col partner-col text-center">
+                        <a href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "New Balance" , area = "KhachHang"})" style="text-decoration:none;">
+                            <img src="~/imagelayout/newbalance1.png" class="img-fluid" alt="Free html4 bootstrap 4 template" style="height: 76%;margin-top: 2%;">
+                        </a>
+                    </div>
+                    <div class="col partner-col text-center">
+                        <a href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "Converse" , area = "KhachHang"})" style="text-decoration:none;">
+                            <img src="~/imagelayout/converse.png" class="img-fluid" alt="Free html4 bootstrap 4 template" style="height: 76%;margin-top: 2%;">
+                        </a>
+                    </div>
+                    <div class="col partner-col text-center">
+                        <a href="@Url.Action("LocTheoThuongHieu","TrangChu" , new { TenThuongHieu = "Puma" , area = "KhachHang"})" style="text-decoration:none;">
+                            <img src="~/imagelayout/brand-5.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template" style="margin-top: 6%;">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer id="colorlib-footer" role="contentinfo" style=" background: #2a465e;">
+            <div class="container">
+                <div class="row row-pb-md">
+                    <div class="col footer-col colorlib-widget">
+                        <h4>About Footwear</h4>
+                        <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
+                        <p>
+                            <ul class="colorlib-social-icons">
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                                <li><a href="#"><i class="fab fa-dribbble"></i></a></li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="col footer-col colorlib-widget">
+                        <h4>Customer Care</h4>
+                        <p>
+                            <ul class="colorlib-footer-links">
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">Returns/Exchange</a></li>
+                                <li><a href="#">Gift Voucher</a></li>
+                                <li><a href="#">Wishlist</a></li>
+                                <li><a href="#">Special</a></li>
+                                <li><a href="#">Customer Services</a></li>
+                                <li><a href="#">Site maps</a></li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="col footer-col colorlib-widget">
+                        <h4>Information</h4>
+                        <p>
+                            <ul class="colorlib-footer-links">
+                                <li><a href="#">About us</a></li>
+                                <li><a href="#">Delivery Information</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                                <li><a href="#">Support</a></li>
+                                <li><a href="#">Order Tracking</a></li>
+                            </ul>
+                        </p>
+                    </div>
+
+                    <div class="col footer-col">
+                        <h4>News</h4>
+                        <ul class="colorlib-footer-links">
+                            <li><a href="blog.html">Blog</a></li>
+                            <li><a href="#">Press</a></li>
+                            <li><a href="#">Exhibitions</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col footer-col">
+                        <h4>Contact Information</h4>
+                        <ul class="colorlib-footer-links">
+                            <li>FPT POLYTECHNIC<br> Trịnh Văn Bô, Nam Từ Liêm</li>
+                            <li><a href="tel://1234567920">+ 1235 2355 98</a></li>
+                            <li><a href="mailto:info@yoursite.com">info@yoursite.com</a></li>
+                            <li><a href="#">yoursite.com</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="copy">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <p>
+                            <span>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fas fa-heart"></i> by <a href="https://colorlib.com" target="_blank" style="color:white;">Colorlib</a>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </span>
+                            <span class="block">Demo Images: <a href="http://unsplash.co/" target="_blank" style="color:white;">Unsplash</a> , <a href="http://pexels.com/" target="_blank" style="color:white;">Pexels.com</a></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <div class="gototop js-top">
+        <a href="#" class="js-gotop"><i class="fas fa-arrow-up"></i></a>
+    </div>
+    <script src="~/js/giohang/jquery.min.js"></script>
+    <script src="~/js/layout/jquery.min.js"></script>
+    <!-- jQuery easing -->
+    <script src="~/js/layout/jquery.easing.1.3.js"></script>
+    <script src="~/js/layout/magnific-popup-options.js"></script>
+    <!-- Magnific Popup -->
+    <script src="~/js/layout/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/layout/magnific-popup-options.js"></script>
+    <!-- Date Picker -->
+    <script src="~/js/layout/bootstrap-datepicker.js"></script>
+    <!-- Stellar Parallax -->
+    <script src="~/js/layout/jquery.stellar.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- popper -->
+    <script src="~/js/Layout/popper.min.js"></script>
+    <!-- bootstrap 4.1 -->
+    <script src="~/js/Layout/bootstrap.min.js"></script>
+    <!-- Waypoints -->
+    <script src="~/js/Layout/jquery.waypoints.min.js"></script>
+    <!-- Flexslider -->
+    <script src="~/js/Layout/jquery.flexslider-min.js"></script>
+    <!-- Owl carousel -->
+    <script src="~/js/layout/owl.carousel.min.js"></script>
+    <!-- Main -->
+    <script src="~/js/danhsachsanpham/danhsachsanpham.js"></script>
+    <script src="~/js/Layout/main.js"></script>
+    <script src="~/js/voucher/voucher.js"></script>
+    <script src="~/js/layout/layout.js"></script>
+    <script src="~/js/giohang/giohang.js"></script>
+    <script>
+        ViewSoLuong();
+        DanhSachMauSac();
+        DanhSachSize();
+        DanhSachTheLoai();
+        LstVoucherTheoKH();
+        function ViewSoLuong() {
+            $.ajax({
+                type: 'GET',
+                url: '/KhachHang/GioHang/Soluong',
+                success: function (result) {
+                    $('p[id="soluongtrongiohang"]').text(result);
+                    console.log(result);
+                },
+                error: function (xhr, status, error) {
+                    console.log('Lỗi gọi api: ' + error);
+                }
+            });
+        };
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+﻿@{
+    var result = ViewBag.Result;
+    var trangthai = ViewBag.TrangThai;
+    var idhd = ViewBag.idhd;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        div#lstVoucher {
+            display: none;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f2f2f2;
+        }
+
+        h3 {
+            color: #63E6BE;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        i {
+            color: #63E6BE;
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+    </style>
+</head>
+<body>
+    <p id="IdCuaHoaDon" style="display:none;">@idhd</p>
+    <div class="container">
+        @if (result == "Giao dịch được thực hiện thành công")
+        {
+            <h3>Thanh toán thành công</h3>
+            <i class="far fa-check-circle" style="color: #63E6BE;"></i>
+            <p>Cảm ơn quý khách đã thanh toán!</p>
+        }
+        else
+        {
+            <h3 style="color: #ff0000;">Thanh toán thất bại</h3>
+            <i class="fas fa-times-circle" style="color: #ff0000;"></i>
+        }
+        @if (trangthai == Convert.ToString(2))
+        {
+            <div style="display:flex;height: 40px;width: 280px;">
+                <a class="btn btn-success" href="~/Admin/BanHangTaiQuay/BanHang">Quay lại</a>
+
+                <a class="btn btn-light text-capitalize border-0" data-mdb-ripple-color="dark" style="height: 42px;position: absolute;right: 43%;" onclick="xuatHoaDon();">
+                    <i class="fas fa-print text-primary" style="font-size: 30px;"></i> Print
+                </a>
+            </div>
+        }
+        else
+        {
+            <a class="btn btn-success" href="~/KhachHang/HoaDonKH/DanhSachHoaDonTheoNguoiDungKH">Quay lại</a>
+        }
+    </div>
+</body>
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/giohang/jquery.min.js"></script>
+<script src="~/js/hoadon/hoadon.js"></script>
+</html>

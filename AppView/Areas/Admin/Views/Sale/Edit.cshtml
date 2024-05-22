@@ -1,0 +1,166 @@
+﻿@model AppData.Entities.Models.Sale
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link href="~/css/layout/adminlte.min.css" rel="stylesheet" />
+<link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" />
+<style>
+    div#lstVoucher {
+        display: none;
+    }
+</style>
+<section class="content">
+    <div class="">
+        <div class="">
+            <form method="post" id="formSale" style="width: 800px;margin: auto;">
+                <div class="form-group">
+                    <input value="@Model.ID" id="ID" hidden type="text" />
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="MaSale" class="control-label col-md-3">Mã Sale</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input value="@Model.MaSale" type="text" class=" form-control custom-input" readonly id="MaSale" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="control-label col-md-3">Ngày Bắt Đầu</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="date" class="form-control" value="@Model.NgayBatDau.Value.Date.ToString("yyyy-MM-dd")" id="NgayBatDau" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="control-label col-md-3">Ngày Kết Thúc</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="date" class="form-control" value="@Model.NgayKetThuc.Value.ToString("yyyy-MM-dd")" id="NgayKetThuc" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="control-label col-md-3">Phần Trăm Giảm: </label>
+                    </div>
+                    <div class="col-md-9">
+                        <input value="@Model.PhanTramGiam" type="text" class="form-control" id="PhanTramGiam" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="control-label col-md-3">Trạng Thái: </label>
+                    </div>
+                    <div class="col-md-9">
+                        <select id="trangThai" class="form-control">
+                            <option value="-1">Chọn trạng thái</option>
+                            <option value="1">Hoạt động</option>
+                            <option value="0">Không hoạt động</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+            <div><a href="~/Admin/Sale/DanhSach"><i class="fas fa-arrow-circle-left" style="color: #005eff;"></i></a></div>
+        </div>
+    </div>
+</section>
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/layout/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/adminlte.js"></script>
+
+<script>
+    loadTrangthai();
+    $(document).ready(function () {
+        $('#formSale').submit(function (e) {
+            // Get form data
+            var formData = {
+                ID: $('#ID').val(),
+                MaSale: $('#MaSale').val(),
+                NgayBatDau: $('#NgayBatDau').val(),
+                NgayKetThuc: $('#NgayKetThuc').val(),
+                PhanTramGiam: $('#PhanTramGiam').val(),
+            };
+            console.log(formData);
+
+            // Send POST request
+            $.ajax({
+                type: 'POST',
+                url: '/admin/sale/Edit',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+
+                success: function (response) {
+                    console.log(response);
+                    //location.reload();
+                    window.location.href = "/Admin/sale/DanhSach";
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+            return false; // Prevent the form from submitting normally
+        });
+
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        //TruyenMoTa();
+        var selectElement = document.getElementById('trangThai');
+        selectElement.addEventListener('change', function () {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/Voucher/NhanTrangThai',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(selectElement.value),
+                success: function (result) {
+                },
+                error: function (error) {
+                    console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+                },
+
+            });
+        });
+    });
+    function loadTrangthai(){
+        var id = document.getElementById("ID").value;
+        $.ajax({
+            type: 'POST',
+            url: '/admin/sale/DetailJson',
+            data: JSON.stringify(id),
+            contentType: 'application/json',
+
+            success: function (response) {
+                console.log(response);
+                document.getElementById("trangThai").value = response.trangThai;
+                
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    };
+    function formatDate(datetimeString) {
+        var date = new Date(datetimeString);
+
+        // Lấy các giá trị ngày, tháng, năm, giờ, phút từ đối tượng Date
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1; // Lưu ý: getMonth trả về index của tháng từ 0 đến 11, nên cần cộng thêm 1
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+
+        // Format lại các giá trị ngày, tháng, năm, giờ, phút thành chuỗi để gửi lên server
+        var formattedDateTime = year + "-" + (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day) + "T" + (hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute);
+        return formattedDateTime;
+    }
+
+
+</script>

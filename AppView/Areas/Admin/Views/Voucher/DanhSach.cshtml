@@ -1,0 +1,292 @@
+﻿@model IEnumerable<AppData.Entities.Models.Voucher>
+
+@{
+    ViewData["Title"] = "DanhSach";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link href="~/css/layout/adminlte.min.css" rel="stylesheet" />
+<link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" />
+
+
+<style>
+    .badge-error {
+        color: #fff;
+        background-color: #dd4444;
+    }
+
+    a:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+    .pagination-button {
+        background-color: #f0f0f0; /* Màu nền mặc định cho các nút */
+        border-color: #f0f0f0;
+        color: black; /* Màu chữ mặc định cho các nút */
+    }
+
+        .pagination-button.current {
+            background-color: #44b6e1; /* Màu nền cho nút hiện tại */
+            border-color: #44b6e1;
+            color: white; /* Màu chữ cho nút hiện tại */
+        }
+
+    button {
+        margin-left: 2%;
+    }
+</style>
+</style>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1></h1>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<form action="~/Admin/Sale/DanhSach" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-8">
+        </div>
+        @*Lọc theo trạng thái*@
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-8">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<section class="content">
+    <div class="card">
+        <div class="card-header" style="display:flex;">
+            <h3 style="font-weight: bolder;float: left;">
+                Danh sách Voucher
+            </h3>
+            <div style="right: 1%;position: absolute;">
+                <a class="btn btn-primary" href="~/Admin/Voucher/Create" style="float: left;"><i class="fas fa-plus-square"></i> Thêm mới</a>
+            </div>
+            </div>
+    <div class="card-body p-0">
+        <table class="table table-striped projects">
+            <thead>
+                <tr class="table-active">
+                    <th style="width:10%">
+                        Mã Voucher                     
+                    </th>
+                    <th style="width:10%">
+                        Ngày Tạo
+                    </th>
+                    <th style="width:10%">
+                        Ngày Bắt Đầu
+                    </th>
+                    <th style="width:10%">
+                        Ngày Kết Thúc
+                    </th>
+                    <th>
+                        Giá Trị Voucher
+                    </th>
+                    <th>
+                        Điều Kiện Min
+                    </th>
+                    <th>
+                        Điều Kiện Max
+                    </th>
+                    <th style="width:10%">
+                        Số Lượng
+                    </th>
+                    <th style="width:10%">
+                        Mô Tả
+                    </th>
+                    <th style="width:8%" class="text-center">
+                        Trạng thái
+                    </th>
+                    <th style="width:1%">                       
+                    </th>
+                    <th style="width:1%">
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="table-user">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                          
+                            @Html.ActionLink(item.MaVoucher, "Detail", new { Id = @item.ID})
+                        </td>
+                        <td>
+                                @item.NgayTao.Date.ToString("dd-MM-yyyy")
+                        </td>
+                        <td>
+                                @item.NgayBatDau.Value.Date.ToString("dd-MM-yyyy")
+                        </td>
+                        <td>
+                                @item.NgayKetThuc.Value.Date.ToString("dd-MM-yyyy")
+                        </td>
+                        <td>
+                            @item.GiaTriVoucher
+                        </td>
+                        <td>
+                            @item.DieuKienMin
+                        </td>
+                        <td>
+                            @item.DieuKienMax
+                        </td>
+                        <td>
+                            @item.SoLuong
+                        </td>
+                        <td>
+                            @item.MoTa
+                        </td>
+                        <td class="project-state">
+                            @if (item.TrangThai == 1)
+                            {
+                                <span class="badge badge-success">Hoạt động</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-error">Không hoạt động</span>
+                            }
+
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Delete", "Voucher", new { Id = item.ID })" style="text-decoration:none;"><i class="fas fa-trash" style="color:red;"> </i></a>
+                        </td>
+                        <td>
+                             <a href="@Url.Action("UpdateVoucher", "Voucher", new { Id = item.ID })" style="text-decoration:none;"><i class="fas fa-edit"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+            <div class="pagination" id="pagination" style="margin: auto;margin-top: 2%;width: 400px;margin-bottom:2%;">
+                <button onclick="previousPage()">Previous</button>
+                <!-- Số trang sẽ được thêm vào đây bằng JavaScript -->
+                <button onclick="nextPage()">Next</button>
+            </div>
+    </div>
+</section>
+<script src="~/js/nguoidung/qlnguoidung.js"></script>
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/layout/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/adminlte.js"></script>
+<script>
+    PhanTrangVoucher();
+    function PhanTrangVoucher() {
+        const rowsPerPage = 15;
+        const allRows = document.querySelectorAll("#table-user tr");
+        let currentPage = 0;
+        showPage(0);
+
+        function showPage(pageIndex) {
+            allRows.forEach(row => {
+                row.style.display = "none";
+            });
+
+            const startIndex = pageIndex * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+
+            for (let i = startIndex; i < endIndex; i++) {
+                if (allRows[i]) {
+                    allRows[i].style.display = "table-row";
+                }
+            }
+
+            currentPage = pageIndex;
+            renderPaginationButtons();
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                showPage(currentPage - 1);
+            }
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            if (currentPage < totalPages - 1) {
+                showPage(currentPage + 1);
+            }
+        }
+
+        function renderPaginationButtons() {
+            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            const paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = "";
+
+            const prevButton = document.createElement("button");
+            prevButton.textContent = "Previous";
+            prevButton.onclick = previousPage;
+            prevButton.classList.add("pagination-button");
+            paginationContainer.appendChild(prevButton);
+
+            if (totalPages <= 5) {
+                for (let i = 0; i < totalPages; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i + 1;
+                    pageButton.onclick = () => showPage(i);
+                    pageButton.classList.add("pagination-button");
+                    if (i === currentPage) {
+                        pageButton.classList.add("current");
+                    }
+                    paginationContainer.appendChild(pageButton);
+                }
+            } else {
+                let startPage, endPage;
+                if (currentPage <= 2) {
+                    startPage = 0;
+                    endPage = 4;
+                } else if (currentPage >= totalPages - 3) {
+                    startPage = totalPages - 5;
+                    endPage = totalPages - 1;
+                } else {
+                    startPage = currentPage - 2;
+                    endPage = currentPage + 2;
+                }
+
+                if (startPage > 0) {
+                    const ellipsisStart = document.createElement("button");
+                    ellipsisStart.textContent = "...";
+                    ellipsisStart.disabled = true;
+                    ellipsisStart.classList.add("pagination-button");
+                    paginationContainer.appendChild(ellipsisStart);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i + 1;
+                    pageButton.onclick = () => showPage(i);
+                    pageButton.classList.add("pagination-button");
+                    if (i === currentPage) {
+                        pageButton.classList.add("current");
+                    }
+                    paginationContainer.appendChild(pageButton);
+                }
+
+                if (endPage < totalPages - 1) {
+                    const ellipsisEnd = document.createElement("button");
+                    ellipsisEnd.textContent = "...";
+                    ellipsisEnd.disabled = true;
+                    ellipsisEnd.classList.add("pagination-button");
+                    paginationContainer.appendChild(ellipsisEnd);
+                }
+            }
+
+            const nextButton = document.createElement("button");
+            nextButton.textContent = "Next";
+            nextButton.onclick = nextPage;
+            nextButton.classList.add("pagination-button");
+            paginationContainer.appendChild(nextButton);
+        }
+
+        return;
+    }
+</script>
+
+

@@ -1,0 +1,482 @@
+﻿@model IEnumerable<AppData.Entities.ViewModels.SanPhamChiTietViewModel>
+
+@{
+    ViewData["Title"] = "DanhSachSanPhamBan";
+    Layout = "~/Areas/KhachHang/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link href="~/css/layout/animate.css" rel="stylesheet" />
+<!-- Icomoon Icon Fonts-->
+<link href="~/css/layout/icomoon.css" rel="stylesheet" />
+<!-- Ion Icon Fonts-->
+<link href="~/css/layout/ionicons.min.css" rel="stylesheet" />
+<!-- Bootstrap  -->
+<link href="~/css/layout/bootstrap.min.css" rel="stylesheet" />
+
+<!-- Magnific Popup -->
+<link href="~/css/layout/magnific-popup.css" rel="stylesheet" />
+
+<!-- Flexslider  -->
+<link href="~/css/layout/flexslider.css" rel="stylesheet" />
+<!-- Owl Carousel -->
+<link href="~/css/layout/owl.carousel.min.css" rel="stylesheet" />
+<link href="~/css/layout/owl.theme.default.min.css" rel="stylesheet" />
+
+<!-- Date Picker -->
+<link href="~/css/layout/bootstrap-datepicker.css" rel="stylesheet" />
+<!-- Flaticons  -->
+<link href="~/css/layout/fontawesome/flaticon.css" rel="stylesheet" />
+<!-- Theme style  -->
+<link href="~/css/layout/style.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link href="~/js/layout/adminlte/select2/css/select2.min.css" rel="stylesheet" />
+<link href="~/js/layout/adminlte/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+<style>
+    .sale {
+        display: none;
+    }
+
+    aside#colorlib-hero {
+        display: none;
+    }
+
+    .colorlib-intro {
+        display: none;
+    }
+
+    .colorlib-product {
+        display: none;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+    .featured {
+        display: none;
+    }
+
+    .hienthisanpham {
+        margin-top: 50px;
+    }
+
+    .loc {
+        margin: 8px;
+        height: 40px;
+    }
+
+    .btn {
+        margin: 8px;
+    }
+
+    .hienthisanpham {
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .product {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px;
+    }
+
+
+    .details {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .image-container {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        overflow: hidden;
+    }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .phan-tram-giam {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: red;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .price {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .tien-sale {
+        color: red;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .tien-goc {
+        color: #999;
+        text-decoration: line-through;
+        margin-right: 5px;
+    }
+
+    .colorlib-nav .top-menu .search-wrap .submit-search {
+        top: -20% !important;
+        border-radius: 30px;
+        background: white !important;
+        border: 1px solid white !important;
+    }
+
+    output#rangeValue, output#rangeValueSale {
+        padding-top: 5%;
+        margin-left: 66%;
+        min-width: 52px;
+        direction: rtl;
+    }
+
+    .suggestionList {
+        position: absolute;
+        z-index: 1;
+    }
+
+    .suggestionList {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: white;
+    }
+
+    button {
+        margin-left: 2%;
+    }
+
+    .pagination-button {
+        background-color: #f0f0f0; /* Màu nền mặc định cho các nút */
+        border-color: #f0f0f0;
+        color: black; /* Màu chữ mặc định cho các nút */
+    }
+
+        .pagination-button.current {
+            background-color: #44b6e1; /* Màu nền cho nút hiện tại */
+            border-color: #44b6e1;
+            color: white; /* Màu chữ cho nút hiện tại */
+        }
+
+        .suggestionList li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+            .suggestionList li:hover {
+                background-color: #f4f4f4;
+            }
+
+    .col-4.text-center {
+        margin-bottom: 10px;
+    }
+
+    .product-entry {
+        transition: transform 0.3s ease;
+    }
+
+        .product-entry:hover {
+            transform: translateY(-5px); /* Nổi lên 5px */
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng đổ bóng */
+        }
+
+            .product-entry:hover .desc {
+                background-color: #fff; /* Tùy chỉnh màu nền của phần desc */
+            }
+
+            /* Nếu muốn thay đổi màu chữ khi hover */
+            .product-entry:hover h2 a {
+                color: #ff0000; /* Đổi màu chữ thành đỏ */
+            }
+
+    .product-entry1 {
+        transition: transform 0.3s ease;
+    }
+
+        .product-entry1:hover {
+            transform: translateY(-5px); /* Nổi lên 5px */
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng đổ bóng */
+        }
+
+            .product-entry1:hover .desc {
+                background-color: #fff; /* Tùy chỉnh màu nền của phần desc */
+            }
+
+            /* Nếu muốn thay đổi màu chữ khi hover */
+            .product-entry1:hover h2 a {
+                color: #ff0000; /* Đổi màu chữ thành đỏ */
+            }
+
+    .product-entry1 .desc h2 {
+        text-transform: uppercase;
+        font-size: 18px;
+    }
+
+    .border.col-md-4.text-center.product-entry1 {
+        width: 31%;
+        margin-left: 1%;
+        margin-top: 1%;
+    }
+
+    .breadcrumb {
+        background: white;
+    }
+
+    a.node1 {
+        margin: 0px 6px 0px -18px;
+    }
+
+    i.fas.fa-angle-double-right {
+        margin: 3px 2px 0px 4px;
+    }
+
+    i.fas.fa-user-circle {
+        font-size: 34px !important;
+        margin-left: -11% !important;
+        margin-top: 44% !important;
+    }
+</style>
+<div class="hienthisanpham">
+    <div class="container" style="margin-top: 0%;">
+        <div class="breadcrumb">
+            <a href="/KhachHang/TrangChu/Index" class="node1">Trang chủ</a> <i class="fas fa-angle-double-right"></i> <a href="/KhachHang/TrangChu/DanhSachSanPhamBan">Sản phẩm</a>
+        </div>
+        <ul class="nav nav-pills" style="margin-bottom: 1%;">
+            <li class="active"><a data-toggle="pill" href="#home">Sản phẩm</a></li>
+            <li><a data-toggle="pill" href="#menu1">Sản phẩm sale</a></li>
+            @*    <li><a data-toggle="pill" href="#menu2">Menu 2</a></li>
+            <li><a data-toggle="pill" href="#menu3">Menu 3</a></li> *@
+        </ul>
+        <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+                <div class="row">
+                    <div class="col-lg-3 col-xl-3">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="side border mb-1">
+                                    <h3><i class="fas fa-filter"></i> Bộ lọc tìm kiếm</h3>
+                                    <input id="txt_Thuonghieu" oninput="suggestThuongHieu(event);" class="loc form-control" placeholder="Nhập thương hiệu" />
+                                    <ul class="suggestionList" id="suggestionListThuonghieu" style="top: 35%;left: 15%; width: 77%;"></ul>
+                                   @*  <select class="select2" multiple="multiple" data-placeholder="Nhập thương hiệu" style="width: 100%;">
+                                        <option>Alabama</option>
+                                        <option>Alaska</option>
+                                        <option>California</option>
+                                        <option>Delaware</option>
+                                        <option>Tennessee</option>
+                                        <option>Texas</option>
+                                        <option>Washington</option>
+                                    </select> *@
+                                    <input id="txt_MauSac" oninput="suggestMauSac(event);" class="loc form-control" placeholder="Nhập màu sắc" />
+                                    <ul class="suggestionList" id="suggestionListMauSac" style="top: 49%;left: 15%; width: 77%;"></ul>
+
+                                    <input id="txt_Size" oninput="suggestSize(event);" class="loc form-control" placeholder="Nhập size" />
+                                    <ul class="suggestionList" id="suggestionListSize" style="top: 64%;left: 15%; width: 77%;"></ul>
+
+                                    <input id="txt_LoaiSanPham" oninput="suggestTheLoai(event);" class="loc form-control" placeholder="Nhập loại sản phẩm" />
+                                    <ul class="suggestionList" id="suggestionListSanPham" style="top: 78%;left: 15%; width: 77%;"></ul>
+
+                                    <button id="btn_timkiem" class="btn btn-primary" onclick="LocSanPhamTheoMaiSizeThuongHieuLoaiSanPham();">Áp dụng</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="side border mb-1">
+                                    <div style="display:flex">
+                                        <h3 for="customRange" class="form-label">Giá</h3>
+                                        <output class="mt-2" id="rangeValue">0</output>
+                                    </div>
+                                    <input type="range" class="form-range" id="customRange" name="points" min="0" max="10000000">  @* oninput="updateTextInput(this.value);" *@
+                                    <button id="btn_timkiem1" class="btn btn-primary" onclick="LocSanPhamTheoGiaSanPham();">Áp dụng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-xl-9">
+                        <div class="row" id="sanpham">
+                            @*Hiển thị sản phẩm*@
+                        </div>
+
+                        <div class="pagination" id="pagination" style="margin-top: 2%;width: 400px ;margin-left: 28%;">
+                            <button onclick="previousPage()">Previous</button>
+                            <!-- Số trang sẽ được thêm vào đây bằng JavaScript -->
+                            <button onclick="nextPage()">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="menu1" class="tab-pane fade">
+                <div class="row">
+                    <div class="col-lg-3 col-xl-3">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="side border mb-1">
+                                    <h3><i class="fas fa-filter"></i> Bộ lọc tìm kiếm</h3>
+
+                                    <input id="txt_Thuonghieusale" oninput="suggestThuongHieuSale(event);" class="loc form-control" placeholder="Nhập thương hiệu" />
+                                    <ul class="suggestionList" id="suggestionListThuonghieuSale" style="top: 35%;left: 15%; width: 77%;"></ul>
+
+                                    <input id="txt_MauSacsale" oninput="suggestMauSacSale(event);" class="loc form-control" placeholder="Nhập màu sắc" />
+                                    <ul class="suggestionList" id="suggestionListMauSacSale" style="top: 49%;left: 15%; width: 77%;"></ul>
+
+                                    <input id="txt_Sizesale" oninput="suggestSizeSale(event);" class="loc form-control" placeholder="Nhập size" />
+                                    <ul class="suggestionList" id="suggestionListSizeSale" style="top: 64%;left: 15%; width: 77%;"></ul>
+
+                                    <input id="txt_LoaiSanPhamsale" oninput="suggestTheLoaiSale(event);" class="loc form-control" placeholder="Nhập loại sản phẩm" />
+                                    <ul class="suggestionList" id="suggestionListSanPhamSale" style="top: 78%;left: 15%; width: 77%;"></ul>
+
+                                    <button id="btn_timkiemsale" class="btn btn-primary" onclick="LocSanPhamSaleTheoMauSizeThuongHieuLoaiSanPham();">Áp dụng</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="side border mb-1">
+                                    <div style="display:flex">
+                                        <h3 for="customRangeSale" class="form-label">Giá</h3>
+                                        <output class="mt-2" id="rangeValueSale">0</output>
+                                    </div>
+                                    <input type="range" class="form-range" id="customRangeSale" name="points" min="0" max="10000000"> @*  oninput="updateTextInputSale(this.value);" *@
+                                    <button id="btn_timkiem1" class="btn btn-primary" onclick="LocTheoGiaCuaSanPhamSale();">Áp dụng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-xl-9">
+                        <div class="row" id="SanPhamSale">
+                            @*Hiển thị sản phẩm*@
+                        </div>
+                        <div class="pagination1" id="pagination1" style="margin-top: 2%;width: 400px; margin-left: 28%;">
+                            <button onclick="previousPage1()">Previous</button>
+                            <!-- Số trang sẽ được thêm vào đây bằng JavaScript -->
+                            <button onclick="nextPage1()">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*        <div id="menu2" class="tab-pane fade">
+            <h3>Menu 2</h3>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+            </div>
+            <div id="menu3" class="tab-pane fade">
+            <h3>Menu 3</h3>
+            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            </div> *@
+        </div>
+
+    </div>
+</div>
+<!-- jQuery -->
+<script src="~/js/Layout/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<!-- jQuery easing -->
+<script src="~/js/layout/jquery.easing.1.3.js"></script>
+<script src="~/js/layout/magnific-popup-options.js"></script>
+<!-- Owl carousel -->
+<script src="~/js/layout/owl.carousel.min.js"></script>
+<!-- Magnific Popup -->
+<script src="~/js/layout/jquery.magnific-popup.min.js"></script>
+<script src="~/js/layout/magnific-popup-options.js"></script>
+<!-- Date Picker -->
+<script src="~/js/layout/bootstrap-datepicker.js"></script>
+<!-- Stellar Parallax -->
+<script src="~/js/layout/jquery.stellar.min.js"></script>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!-- popper -->
+<script src="~/js/Layout/popper.min.js"></script>
+<!-- bootstrap 4.1 -->
+<script src="~/js/Layout/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script src="~/js/Layout/jquery.waypoints.min.js"></script>
+<!-- Flexslider -->
+<script src="~/js/Layout/jquery.flexslider-min.js"></script>
+<!-- Main -->
+<script src="~/js/Layout/main.js"></script>
+<script src="~/js/Layout/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/layout/layout.js"></script>
+<script src="~/js/layout/adminlte/select2/js/select2.full.min.js"></script>
+<script src="~/js/sale/sale.js"></script>
+<script src="~/js/DanhSachSanPham/DanhSachSanPham.js"></script>
+<script type="text/javascript">
+    LocSanPhamTheoMaiSizeThuongHieuLoaiSanPham();
+    SanPhamSaleHK();
+    DanhSachMauSac();
+    DanhSachThuongHieu();
+    DanhSachSize();
+    DanhSachTheLoai();
+    DanhSachGia();
+    document.addEventListener("DOMContentLoaded", function () {
+        var rangeInput = document.getElementById('customRange');
+        var rangeValue = document.getElementById('rangeValue');
+
+        rangeValue.innerText = rangeInput.value;
+
+        // Update value when input changes
+        rangeInput.addEventListener('input', function () {
+            rangeValue.innerText = this.value;
+            $.ajax({
+                type: 'POST',
+                url: '/KhachHang/TrangChu/NhanGiaMax',// Điều chỉnh đường dẫn tùy thuộc vào định tuyến của bạn
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(this.value),
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (error) {
+                    console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+                },
+
+            });
+        });
+        //Sale
+        var rangeInputsale = document.getElementById('customRangeSale');
+        var rangeValuesale = document.getElementById('rangeValueSale');
+
+        // Set initial value
+        rangeValuesale.innerText = rangeInputsale.value;
+
+        // Update value when input changes
+        rangeInputsale.addEventListener('input', function () {
+            rangeValuesale.innerText = this.value;
+            $.ajax({
+                type: 'POST',
+                url: '/KhachHang/SaleKH/NhanGiaMaxSale',// Điều chỉnh đường dẫn tùy thuộc vào định tuyến của bạn
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(this.value),
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (error) {
+                    console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+                },
+
+            });
+        });
+
+    });
+    // $('.select2').select2();
+</script>

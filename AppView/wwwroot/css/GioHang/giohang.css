@@ -1,0 +1,71 @@
+﻿body {
+    width: 99.23%;
+}
+#btnThanhToan {
+    width: 100%;
+    border-radius: 10px;
+    height: 50px;
+    font-size: 20px;
+    background-color: #616161;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#btnThanhToan:hover {
+    background-color: black;
+    color: white;
+}
+
+.frmThongTinVanChuyen {
+    margin-left: 30px;
+}
+
+.HinhThucThanhToan {
+    margin-left: 30px;
+}
+
+.form-control {
+    margin-top: 8px;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    box-sizing: border-box;
+    border-radius: 16px;
+    height: 44px;
+    width: 100%;
+    padding: 5px 20px;
+    transition: all .2s;
+}
+
+.applyCoupon {
+    margin-top: 9px;
+}
+
+.text-right {
+    padding-left: 60%;
+}
+
+.cartDetail {
+    padding-right: 2%;
+}
+
+.total {
+    padding: 0 5px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.product-cart .form-control {
+    width: 40%;
+}
+span.payment-method__item-name {
+    font-size: 18px;
+    margin: 10px;
+}
+span.paymant-method__item-cutom-checkbox.custom-radio {
+    font-size: 23px;
+    margin-left: 15px;
+}
+input#payment-COD {
+    margin-left: 20px;
+}

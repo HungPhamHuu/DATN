@@ -1,0 +1,83 @@
+﻿@model IEnumerable<AppData.Entities.ViewModels.GioHangCTVM.GioHangCTVM>
+
+@{
+    ViewData["Title"] = "ShowAllCartDetail";
+}
+
+<h1>ShowAllCartDetail</h1>
+
+<p>
+    <a asp-action="CreateCartDetail">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            @* <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.IDGioHang)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IDSPCT)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenSP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SoLuong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Size)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MauSac)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ThanhTien)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.IDGioHang)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDSPCT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenSP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SoLuong)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Size)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MauSac)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ThanhTien)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "UpdateCartDetail", new { Id=item.ID }) |
+                @* @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) | *@
+                @Html.ActionLink("Delete", "DeleteCartDetail", new { Id = item.ID })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,256 @@
+﻿@model IEnumerable<AppData.Entities.Models.HoaDon>
+
+@{
+    ViewData["Title"] = "DanhSachHoaDonTheoNguoiDung";
+    Layout = "~/Areas/KhachHang/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/layout/layout.css" rel="stylesheet" asp-append-version="true" />
+<style>
+    .pagination {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .pagination li {
+            margin-right: 5px;
+        }
+
+            .pagination li a {
+                text-decoration: none;
+                padding: 5px 10px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                background-color: #f9f9f9;
+            }
+
+                .pagination li a.active {
+                    background-color: #007bff;
+                    color: #fff;
+                }
+
+    button {
+        margin-left: 2%;
+    }
+
+    .pagination-button {
+        background-color: #f0f0f0; /* Màu nền mặc định cho các nút */
+        border-color: #f0f0f0;
+        color: black; /* Màu chữ mặc định cho các nút */
+    }
+
+        .pagination-button.current {
+            background-color: #44b6e1; /* Màu nền cho nút hiện tại */
+            border-color: #44b6e1;
+            color: white; /* Màu chữ cho nút hiện tại */
+        }
+
+    div#lstVoucher {
+        display: none;
+    }
+</style>
+
+<div style="width: 1200px;margin: auto;margin-top: 45px;">
+    <div class="row">
+        <div class="row-md-8">
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <label class="control-label col-md-4">Trạng thái: </label>
+                <div class="col-md-8">
+                    <select id="trangthaiFilterKH" name="trangthaiFilterKH" class="form-control">
+                        <option value="-1">Tất cả</option>
+                        <option value="0">Không hoạt động</option>
+                        <option value="1">Đang xử lý</option>
+                        <option value="2">Hóa đơn chờ</option>
+                        <option value="3">Đã thanh toán chờ xác nhận</option>
+                        <option value="4">Giao hàng thành công</option>
+                        <option value="5">Đang giao</option>
+                        <option value="6">Hủy</option>
+                        <option value="8">Hoàn hàng</option>
+                        <option value="9">Hoàn hàng thành công</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-bordered" style="margin-top: 2%;" id="dataTable">
+        <thead>
+            <tr>
+                <th style="display:none;">
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th>
+                    STT
+                </th>
+                <th>
+                    Mã hóa đơn
+                </th>
+                <th>
+                    Ngày tạo
+                </th>
+                <th>
+                    Tên khách hàng
+                </th>
+                <th>
+                    Số điện thoại
+                </th>
+                <th>
+                    Tổng tiền
+                </th>
+                <th>
+                    Trạng thái
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="DanhSachHDKH">
+        </tbody>
+    </table>
+    <div class="pagination" id="pagination" style="margin: auto;margin-top: 2%;width: 400px;margin-bottom: 2%;">
+        <button onclick="previousPage()">Previous</button>
+        <!-- Số trang sẽ được thêm vào đây bằng JavaScript -->
+        <button onclick="nextPage()">Next</button>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="~/js/giohang/jquery.min.js"></script>
+<script type="text/javascript" src="~/js/layout/jquery.min.js"></script>
+<!-- bootstrap 4.1 -->
+<script type="text/javascript" src="~/js/layout/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="~/js/layout/layout.js"></script>
+<script type="text/javascript" src="~/js/hoadon/hoadon.js"></script>
+
+<script>
+    DanhSachHoaDonTheoNguoiDungKH();
+    document.addEventListener("DOMContentLoaded", function () {
+        var dropdownToggle = document.querySelector('.dropdown-toggle');
+        var dropdownMenu = document.querySelector('.dropdown-menu');
+
+        // Function to toggle dropdown menu visibility
+        function toggleDropdown() {
+            dropdownMenu.classList.toggle('show');
+        }
+
+        // Event listener to toggle dropdown menu visibility on button click
+        dropdownToggle.addEventListener('click', function () {
+            toggleDropdown();
+        });
+
+        // Event listener to hide dropdown menu when clicking outside of it
+        document.addEventListener('click', function (event) {
+            var targetElement = event.target;
+            if (!targetElement.matches('.dropdown-toggle')) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+    });
+    document.getElementById("trangthaiFilterKH").addEventListener("change", function () {
+        var selectedValue = this.value;
+        if (selectedValue == "-1") {
+            DanhSachHoaDonTheoNguoiDungKH();
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '/KhachHang/HoaDonKH/DanhSachTrangThaiHoaDonTheoNguoiDungKHJson', // Điều chỉnh đường dẫn tùy thuộc vào định tuyến của bạn
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(selectedValue),
+                success: function (result) {
+                    $("#DanhSachHDKH").empty();
+                    var content = '';
+                    if (result.length > 0) {
+                        for (var i = 0; i < result.length; i++) {
+                            var stt = i + 1;
+                            var formattedNumber = result[i].tongTien.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                            var datetime = new Date(result[i].ngayTao);
+
+                            var day = datetime.getDate();
+                            var month = datetime.getMonth() + 1; // Tháng trong JS bắt đầu từ 0
+                            var year = datetime.getFullYear();
+                            var hours = datetime.getHours();
+                            var minutes = datetime.getMinutes();
+
+                            // Định dạng lại các thành phần (đảm bảo hai chữ số cho ngày, tháng, giờ và phút)
+                            day = day < 10 ? '0' + day : day;
+                            month = month < 10 ? '0' + month : month;
+                            hours = hours < 10 ? '0' + hours : hours;
+                            minutes = minutes < 10 ? '0' + minutes : minutes;
+
+                            // Tạo chuỗi định dạng theo mong muốn
+                            var formattedDate = day + '-' + month + '-' + year;
+                            var formattedTime = hours + ':' + minutes;
+                            content += '<tr>';
+                            content += '<td style="display:none;">' + result[i].id + '</td>';
+                            content += '<td>' + stt + '</td>';
+                            content += '<td><a href="/KhachHang/HoaDonKH/HoaDonChiTietKH?idhd=' + result[i].id + '">' + result[i].maHoaDon + '</a></td>';
+                            content += '<td>' + formattedDate + ' ' + formattedTime + '</td>';
+                            content += '<td>' + result[i].tenKhachHang + '</td>';
+                            content += '<td>' + result[i].sdtKhachHang + '</td>';
+                            content += '<td>' + formattedNumber + '</td>';
+                            content += '<td>';
+                            if (result[i].trangThai == 1) {
+                                content += '<p>Đang xử lý</p>';
+                            } else if (result[i].trangThai == 2) {
+                                content += '<p>Hóa đơn chờ</p>';
+                            } else if (result[i].trangThai == 3) { // 3 là thanh toán trước nhận hàng sau
+                                content += '<p>Đã thanh toán chờ xác nhận.</p>';
+                            } else if (result[i].trangThai == 4) {  // 4 là hoàn thành đơn hàng
+                                content += '<p>Giao thành công</p>';
+                            } else if (result[i].trangThai == 5) {
+                                content += '<p>Đang giao</p>';
+                            } else if (result[i].trangThai == 6) {
+                                content += '<p>Đã hủy</p>';
+                            } else if (result[i].trangThai == 7) {
+                                content += '<p>Đã xác nhận đơn hàng.</p>';
+                            } else if (result[i].trangThai == 8) {
+                                content += '<p>Hoàn hàng.</p>';
+                            } else if (result[i].trangThai == 9) {
+                                content += '<p>Hoàn hàng thành công.</p>';
+                            } else {
+                                content += '';
+                            }
+                            content += '</td>';
+
+                            content += '<td>';
+                            if (result[i].trangThai == 1 || result[i].trangThai == 2) {
+                                content += '<button class="btn btn-danger" style="border:none; color:white;" onclick="HuyDonHang(\'' + result[i].id + '\')"> Hủy</button > ';
+                            } else if (result[i].trangThai == 4) {  // 4 là hoàn thành đơn hàng
+                                content += '<p style "border: 2px, border-color: green">Giao thành công</p>';
+                            } else if (result[i].trangThai == 5) {
+                                content += '<button class="btn btn-success" style="border:none; color:white;" onclick="DaNhan(\'' + result[i].id + '\')"> Đã nhận</button > ';
+                            } else if (result[i].trangThai == 7) {
+                                content += '<button class="btn btn-primary" onclick="HoanHang(\'' + result[i].id + '\');">Hoàn hàng</button>';   // Khách hàng hoàn hàng
+                            } else if (result[i].trangThai == 6) {
+                                content += '<p style "border: 2px, border-color: red>Đã hủy</p>';
+                            } else if (result[i].trangThai == 8) {
+                                content += '<p style "border: 2px, border-color: black>Chờ xác nhận.</p>';
+                            } else if (result[i].trangThai == 9) {
+                                content += content += '<p style "border: 2px, border-color: black>Hoàn hàng thành công..</p>';;
+                            } else {
+                                content += '';
+                            }
+                            content += '</td>';
+                            content += '</tr>';
+                        }
+                        $("#DanhSachHDKH").append(content);
+                        PhanTrangKH();
+                    } else {
+                        content += '<tr>Không có dữ liệu</tr>';
+                        $("#DanhSachHDKH").append(content);
+                    }
+                    console.log(result);
+
+                },
+                error: function (error) {
+                    console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+                }
+            });
+        }
+        return;
+    });
+</script>

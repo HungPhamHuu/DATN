@@ -1,0 +1,419 @@
+﻿@model AppData.Entities.Models.SanPhamChiTiet
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var dataanh = ViewBag.listanh;
+}
+<!-- Theme style -->
+<link href="~/css/adminlte/adminlte.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/dist/css/adminlte.min.css" />
+<!-- summernote -->
+<link rel="stylesheet" href="~/css/adminlte/summernote-bs4.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link href="~/js/layout/adminlte/select2/css/select2.min.css" rel="stylesheet" />
+<link href="~/js/layout/adminlte/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+
+<style>
+    form.TaiFile {
+        margin: 10px;
+    }
+
+    span.select2-selection.select2-selection--single {
+        height: 40px;
+    }
+</style>
+<hr />
+
+<form method="post" enctype="multipart/form-data" action="~/Admin/SanPhamChiTiet/UploadExcelFile" class="TaiFile">
+    <input type="file" name="excelFile" />
+    <input type="submit" value="Tải lên" />
+</form>
+
+<div class="" style="margin:10px">
+    <div class="">
+        <form action="~/Admin/SanPhamChiTiet/Create" style="width: 1200px; margin: auto;">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="display:none;">
+                <label asp-for="ID" class="control-label"></label>
+                <input asp-for="ID" class="form-control" />
+                <span asp-validation-for="ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IDSP" class="control-label">Sản phẩm</label>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.DropDownList("IDSP", ViewBag.SanPham as IEnumerable<SelectListItem>, "", new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.IDSP, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#ModalSanPham">
+                            <i class="fas fa-plus-square fa-lg" style="color: #4400ff;"></i>
+                        </button>
+                        <div class="modal" id="ModalSanPham">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Sản phẩm</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-2" style="margin: auto;">
+                                                Tên sản phầm :
+                                            </div>
+                                            <div class="col-md-10">
+                                                <input type="text" id="txt_tensanpham" class="inputThem form-control" />
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2" style="margin: auto;">
+                                                Khối lượng (Gam) :
+                                            </div>
+                                            <div class="col-md-10">
+                                                <input type="number" id="txt_khoiluong" class="inputThem form-control" />
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button onclick="ThemSanPham();" class="btn btn-primary">Thêm</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IDSize" class="control-label">Size</label>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.DropDownList("IDSize", ViewBag.Size as IEnumerable<SelectListItem>, "", new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.IDSize, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#ModalSize">
+                            <i class="fas fa-plus-square fa-lg" style="color: #4400ff;"></i>
+                        </button>
+                        <div class="modal" id="ModalSize">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Size</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-2" style="margin: auto;">
+                                                Size :
+                                            </div>
+                                            <div class="col-md-10">
+                                                <input type="number" min="0" id="txt_size" class="inputThem form-control" />
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button onclick="ThemSize();" class="btn btn-primary">Thêm</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IDMauSac" class="control-label">Màu sắc</label>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.DropDownList("IDMauSac", ViewBag.MauSac as IEnumerable<SelectListItem>, "", new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.IDMauSac, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#ModalMauSac">
+                            <i class="fas fa-plus-square fa-lg" style="color: #4400ff;"></i>
+                        </button>
+                        <div class="modal" id="ModalMauSac">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Màu sắc</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-2" style="margin: auto;">
+                                                Màu sắc :
+                                            </div>
+                                            <div class="col-md-10">
+                                                <input type="text" id="txt_mausac" class="inputThem form-control" />
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button onclick="ThemMauSac();" class="btn btn-primary">Thêm</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IDThuongHieu" class="control-label">Thương hiệu</label>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.DropDownList("IDThuongHieu", ViewBag.ThuongHieu as IEnumerable<SelectListItem>, "", new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.IDThuongHieu, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#ModalThuongHieu">
+                            <i class="fas fa-plus-square fa-lg" style="color: #4400ff;"></i>
+                        </button>
+                        <div class="modal" id="ModalThuongHieu">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Thương hiệu</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-2" style="margin: auto;">
+                                                Tên thương hiệu :
+                                            </div>
+                                            <div class="col-md-10">
+                                                <input type="text" id="txt_thuonghieu" class="inputThem form-control" />
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button onclick="ThemThuongHieu();" class="btn btn-primary">Thêm</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="MaSPCT" class="control-label">Mã sản phẩm</label>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.TextBoxFor(m => m.MaSPCT, new { @class = "form-control" })
+                        <span asp-validation-for="MaSPCT" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="LoaiSanPham" class="control-label">Loại sản phẩm</label>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.TextBoxFor(m => m.LoaiSanPham, new { @class = "form-control" })
+                        <span asp-validation-for="LoaiSanPham" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="SoLuong" class="control-label">Số lượng</label>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.TextBoxFor(m => m.SoLuong, new { type = "number" ,@class = "form-control" })
+                        <span asp-validation-for="SoLuongSoLuong" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="GiaBan" class="control-label">Giá bán</label>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.TextBoxFor(m => m.GiaBan, new { @class = "form-control" })
+                        <span asp-validation-for="GiaBan" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            @*bắt đầu *@
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IdAnh" class="control-label">Ảnh sản phẩm</label>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary" style="margin-top:8px;" data-bs-toggle="modal" data-bs-target="#myModal">
+                                    Chọn ảnh
+                                </button>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" id="imageFilename" name="imageFilename" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Kho ảnh</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="image-row">
+                                <div class="row">
+                                    @foreach (var image in dataanh)
+                                    {
+                                        <div class="col-md-2">
+                                            <div class="image-item">
+                                                <input type="checkbox" class="image-checkbox" data-image-filename="@image.DuongDan" />
+                                                <img src="@Url.Action("DisplayImage", "Anh", new { DuongDan = image.DuongDan })" alt="Image" class="selectable-image" data-image-id="@image.ID" data-image-filename="@image.DuongDan" style="width: 50%;" />
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="selectImageBtn">Select</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            @*kết thúc*@
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="Mota" class="control-label">Mô tả</label>
+                    </div>
+                    <div class="col-md-7">
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="card card-primary card-outline">
+                                    <div class="form-group">
+                                        <textarea id="compose-textarea" class="form-control" style="height: 500px">
+
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+        <div>
+            <a href="~/Admin/SanPhamChiTiet/GetProductDetails"><i class="fas fa-arrow-circle-left" style="color: #005eff;"></i></a>
+        </div>
+    </div>
+   
+</div>
+
+
+<script src="~/js/danhsachsanpham/jquery/jquery.min.js"></script>
+<script src="~/js/danhsachsanpham/danhsachsanpham.js"></script>
+<!-- jQuery -->
+<script src="~/js/layout/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="~/js/layout/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/adminlte/select2/js/select2.full.min.js"></script>
+<!-- AdminLTE App -->
+<script src="~/js/layout/adminlte.min.js"></script>
+<!-- Summernote -->
+<script src="~/js/layout/adminlte/summernote-bs4.min.js"></script>
+<script src="~/js/anh/anh.js"></script>
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var textarea = document.getElementById('compose-textarea');
+
+        textarea.addEventListener('input', function () {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/SanPhamChiTiet/NhanMoTaSanPham', // Điều chỉnh đường dẫn tùy thuộc vào định tuyến của bạn
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(textarea.value),
+                success: function (result) {
+
+                },
+                error: function (error) {
+                    console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+                }
+            });
+            console.log(textarea.value);
+        });
+    });
+    $('.select2').select2();
+
+</script>

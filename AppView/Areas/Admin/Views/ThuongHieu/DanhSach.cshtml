@@ -1,0 +1,46 @@
+﻿@model IEnumerable<AppData.Entities.Models.ThuongHieu>
+
+@{
+    ViewData["Title"] = "DanhSach";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    <a href="~/Admin/ThuongHieu/Create" class="btn btn-primary" style="margin: 15px 8px 8px 50px;"><i class="fas fa-plus-square"></i> Thêm mới</a>
+</p>
+@if (Model == null)
+{
+    <span>Không có dữ liệu</span>
+}
+else
+{
+    <table class="table table-bordered" style="width: 500px;margin: 0px 8px 8px 50px;">
+        <thead>
+            <tr class="table-active">
+                <th style="display:none;">
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th>
+                    Thương hiệu
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="display:none;">
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenThuongHieu)
+                    </td>
+                    @*  <td>
+            <a href="@Url.Action("Edit", "ThuongHieu", new { Id = item.ID })" style="text-decoration: none;"><i class="fas fa-edit"></i></a>
+            </td> *@
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

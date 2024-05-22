@@ -1,0 +1,177 @@
+﻿@model AppData.Entities.ViewModels.SanPhamChiTietViewModel
+
+@{
+    ViewData["Title"] = "SanPhamChiTiet";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link href="~/css/layout/animate.css" rel="stylesheet" />
+<!-- Icomoon Icon Fonts-->
+<link href="~/css/layout/icomoon.css" rel="stylesheet" />
+<!-- Ion Icon Fonts-->
+<link href="~/css/layout/ionicons.min.css" rel="stylesheet" />
+<!-- Bootstrap  -->
+<link href="~/css/layout/bootstrap.min.css" rel="stylesheet" />
+
+<!-- Magnific Popup -->
+<link href="~/css/layout/magnific-popup.css" rel="stylesheet" />
+
+<!-- Flexslider  -->
+<link href="~/css/layout/flexslider.css" rel="stylesheet" />
+<!-- Owl Carousel -->
+<link href="~/css/layout/owl.carousel.min.css" rel="stylesheet" />
+<link href="~/css/layout/owl.theme.default.min.css" rel="stylesheet" />
+
+<!-- Date Picker -->
+<link href="~/css/layout/bootstrap-datepicker.css" rel="stylesheet" />
+<!-- Flaticons  -->
+<link href="~/css/layout/fontawesome/flaticon.css" rel="stylesheet" />
+<!-- Theme style  -->
+<link href="~/css/layout/style.css" rel="stylesheet" />
+<link href="~/css/layout/layout.css" rel="stylesheet" />
+<style>
+    .top-menu {
+        display: none;
+    }
+
+    footer#colorlib-footer {
+        display: none;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+</style>
+<div class="danhsach">
+    <div class="container">
+        <div class="row row-pb-lg product-detail-wrap">
+            <div class="col-sm-8">
+                <div class="">
+                    <div class="item">
+                        <div class="product-entry border" style="height: 76% !important;">
+                            <a href="#" class="prod-img">
+                                <img src="@Url.Action("DisplayImage", "Anh", new { DuongDan = Model.lstAnhSanPham[0].DuongDan , area = "Admin" })" class="img-fluid" alt="@Model.lstAnhSanPham[0].DuongDan" style="width: 100%;">
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="product-desc">
+                    <h3 id="TenSp">@Model.TenSP</h3>
+                    <p class="price">
+                        <span>@Model.GiaBan.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</span>
+                        <span class="rate">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            (74 Rating)
+                        </span>
+                    </p>
+                    <div style="display:flex">
+                        Thương hiệu: <p id="idTenThuongHieu">@Model.TenThuongHieu</p>
+                    </div>
+                    <div style="display:flex">
+                        Loại sản phẩm: <p id="loaiSanPham">@Model.LoaiSanPham</p>
+                    </div>
+
+
+                    <div class="size-wrap">
+                        <div class="block-26 mb-2">
+                            <h4>Size</h4>
+                            <ul id="lst_size">
+                            </ul>
+                            <span id="GiaTriSize" style="display:none;"></span>
+                        </div>
+                        <div class="block-26 mb-4">
+                            <h4>Màu sắc</h4>
+                            <ul id="lst_mau">
+                            </ul>
+                            <span id="GiaTriMau" style="display:none;"></span>
+                        </div>
+                    </div>
+                    <span id="hienthisoluongsp"></span>
+                    <div class="input-group mb-4">
+                        <span class="input-group-btn">
+                            <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </span>
+                        <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1">
+                        <span class="input-group-btn ml-1">
+                            <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <span id="idsanpham" style="display:none;"></span>
+
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <p class="addtocart"><a class="btn btn-primary btn-addtocart" onclick="ThemSanPhamVaoHoaDonChiTiet();" style="color:white;"><i class="fas fa-cart-plus"></i> Add to Cart</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery -->
+<script src="~/js/Layout/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<!-- jQuery easing -->
+<script src="~/js/layout/jquery.easing.1.3.js"></script>
+<script src="~/js/layout/magnific-popup-options.js"></script>
+<!-- Owl carousel -->
+<script src="~/js/layout/owl.carousel.min.js"></script>
+<!-- Magnific Popup -->
+<script src="~/js/layout/jquery.magnific-popup.min.js"></script>
+<script src="~/js/layout/magnific-popup-options.js"></script>
+<!-- Date Picker -->
+<script src="~/js/layout/bootstrap-datepicker.js"></script>
+<!-- Stellar Parallax -->
+<script src="~/js/layout/jquery.stellar.min.js"></script>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!-- popper -->
+<script src="~/js/Layout/popper.min.js"></script>
+<!-- bootstrap 4.1 -->
+<script src="~/js/Layout/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script src="~/js/Layout/jquery.waypoints.min.js"></script>
+<!-- Flexslider -->
+<script src="~/js/Layout/jquery.flexslider-min.js"></script>
+<!-- Main -->
+<script src="~/js/Layout/main.js"></script>
+<script src="~/js/banhangtaiquay/banhang.js"></script>
+<script src="~/js/danhsachsanpham/danhsachsanpham.js"></script>
+<script>
+    LayDanhSachSanPhamHoanThienTheoTen();
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lấy các elements cần thiết
+        var quantityInput = document.getElementById('quantity');
+        var minusButton = document.querySelector('.quantity-left-minus');
+        var plusButton = document.querySelector('.quantity-right-plus');
+
+        // Xử lý sự kiện khi click vào nút trừ
+        minusButton.addEventListener('click', function () {
+            var currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) { // Đảm bảo số lượng không nhỏ hơn 1
+                quantityInput.value = currentValue - 1;
+            }
+        });
+
+        // Xử lý sự kiện khi click vào nút cộng
+        plusButton.addEventListener('click', function () {
+            var currentValue = parseInt(quantityInput.value);
+            var maxValue = parseInt(quantityInput.getAttribute('max')); // Lấy giá trị max
+            if (!maxValue || currentValue < maxValue) { // Nếu không có giá trị max hoặc chưa đạt giá trị max
+                quantityInput.value = currentValue + 1;
+            }
+        });
+    });
+</script>

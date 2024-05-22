@@ -1,0 +1,83 @@
+﻿@model IEnumerable<AppData.Entities.Models.ThanhToan>
+
+@{
+    ViewData["Title"] = "DanhSachHinhThuc";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link href="~/css/layout/adminlte.min.css" rel="stylesheet" />
+<link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" />
+<style>
+    .badge-error {
+        color: #fff;
+        background-color: #dd4444;
+    }
+
+    a:hover {
+        color: white;
+        text-decoration: none;
+    }
+</style>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th style="display:none;">
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HinhThucThanhToan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrangThai)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="display:none;">
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HinhThucThanhToan)
+                </td>
+                <td>
+                    @if (item.TrangThai == 1)
+                    {
+                        <span class="badge badge-success">Hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-error">không hoạt động</span>
+                    }
+                </td>
+                <td>
+                    @if (item.TrangThai == 1)
+                    {
+                        <button class="btn btn-danger btn-sm">
+                            <i class="fas fa-lock"></i>
+                            @Html.ActionLink("Hủy", "XoaHinhThuc", new { Id = @item.ID})
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary btn-sm">
+                            <i class="fas fa-lock-open"></i>
+                            @Html.ActionLink("Kích hoạt", "KichHoat", new { Id = @item.ID})
+                        </button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="~/js/nguoidung/qlnguoidung.js"></script>
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/layout/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/adminlte.js"></script>

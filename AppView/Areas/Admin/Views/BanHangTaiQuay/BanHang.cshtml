@@ -1,0 +1,494 @@
+﻿@model IEnumerable<AppData.Entities.Models.Anh>
+
+@{
+    ViewData["Title"] = "BanHang";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link href="~/css/layout/adminlte.min.css" rel="stylesheet" />
+<link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+    .soluong {
+        display: flex;
+        margin: 5px;
+    }
+
+
+    #SoLuong {
+        width: 80px;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+
+    .TangSoLuong, .GiamSoLuong {
+        margin: 5px;
+        border-radius: 10px;
+    }
+
+    .card-body h5 a {
+        text-decoration: none;
+        color: black;
+    }
+
+    #TaoHoaDon, #GiamSoLuong {
+        margin: 2px;
+    }
+
+    #ThongTinSanPham {
+        position: relative;
+    }
+
+    #suggestionList {
+        position: absolute;
+        z-index: 1;
+        /* Thêm các thuộc tính cụ thể khác nếu cần */
+    }
+    /* CSS cho ô nhập và danh sách gợi ý */
+    #inputBox {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 300px;
+        margin-bottom: 10px;
+        min-width: 525px;
+    }
+
+    #suggestionList {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        top: 42px;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        left: 141px;
+        min-width: 525px;
+        background-color: white;
+    }
+
+        #suggestionList li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+            #suggestionList li:hover {
+                background-color: #f4f4f4;
+            }
+
+    .noMatch {
+        padding: 8px;
+        color: #888;
+    }
+
+    .kieu {
+        width: 36%;
+        margin-left: 9px;
+        margin-top: 35px;
+    }
+
+    .thongtincanhan {
+        border-radius: 5px;
+        height: 38px;
+        font-size: 16px;
+    }
+
+    .modal-content {
+        width: 1400px;
+        top: 50%;
+        left: 50%;
+        position: fixed;
+        transform: translate(-50%, -50%);
+    }
+
+    .modal-body {
+        height: 700px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .col-md-8 {
+        right: 10px;
+        text-align: right;
+    }
+
+    nav.main-header.navbar.navbar-expand.navbar-white.navbar-light {
+        display: none;
+    }
+
+    footer.main-footer {
+        display: none;
+    }
+
+    div#timkiem {
+        margin: 10px;
+    }
+
+    .pagination li a, .pagination1 li a {
+        color: #007bff; /* Default link color */
+        text-decoration: none;
+        padding: 8px 16px;
+        border: 1px solid #ddd;
+        margin: 0 4px;
+        border-radius: 4px;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+        .pagination li a:hover, .pagination1 li a:hover {
+            background-color: #f1f1f1; /* Hover effect */
+            border-color: #ddd;
+        }
+
+        .pagination li a.active, .pagination li a.active {
+            background-color: #44b6e1;
+            border-color: #44b6e1;
+            color: white;
+        }
+
+
+    .tooltip-custom {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltip-custom .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above the element */
+            left: 50%;
+            margin-left: -60px; /* Center the tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltip-custom .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%; /* At the bottom of the tooltip */
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: black transparent transparent transparent;
+            }
+
+        .tooltip-custom:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+</style>
+<div class="row" style="min-height: 950px; margin:3px;">
+    <div class="col-md-7" style="border: 1px solid; padding: 10px; border-radius: 5px;">
+        <div id="HoaDonChiTiet">
+            <div class="ThongTinHoaDon">
+                <div class="row">
+                    <div class="col-md-6" id="Thongtinkhachhang">
+                        <h4>Họ và tên: </h4> <span id="hoten"></span>
+                        <h4>Số điện thoại:</h4> <span id="sdtkh"></span>
+                    </div>
+                    <div class="col-md-6" id="thongtindonhang">
+                        <h4>Mã hóa đơn: </h4> <span id="mahoadon"></span>
+                        <div style="display:none;">
+                            <h4>id: </h4> <span id="idhd"></span>
+                        </div>
+
+                        <h4>Ngày tạo: </h4> <span id="ngaytao"></span>
+                    </div>
+                </div>
+            </div>
+            <button onclick="Refresh();"><i class="fas fa-sync-alt" style="color: #005eff;"></i></button>
+            <div id="danhsachsanphamhdct">
+                <table class="table table-bordered" style="margin-top: 15px;text-align: center;" id="tablegiohang">
+                    <thead>
+                    <th style="width: 50px;">STT</th>
+                    <th style="width: 200px;">Sản phẩm</th>
+                    <th style="width: 100px;">Đơn giá</th>
+                    <th style="width: 100px;">Số lượng</th>
+                    <th style="width: 100px;">Thành tiền</th>
+                    <th style="width: 70px;"></th>
+                    </thead>
+                    <tbody id="sanpham">
+                    </tbody>
+                </table>
+                <button onclick="Duyethoadoncho(event);" class="btn btn-primary"><i class="fas fa-arrow-circle-right" style="color: #ffffff;"></i> Hóa đơn chờ</button>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-5">
+        <div style="min-height: 450px;">
+            <div id="ThongTin">
+                @*Tạo hóa đơn*@
+                <button id="TaoHoaDon" onclick="TaoHoaDonBanHangTaiQuay();" class="btn btn-primary"><i class="fas fa-plus-square" style="color: #ffffff;"></i> Tạo hóa đơn</button>
+                <button id="themtaikhoan" onclick="ThemNguoiDungTaiQuay();" class="btn btn-primary"><i class="fas fa-plus-square" style="color: #ffffff;"></i> Thêm khách hàng</button>
+                @*Tìm kiếm thông tin*@
+                <input type="text" id="inputBox" oninput="suggest(event);" placeholder="Nhập tên hoặc sđt...">
+                <ul id="suggestionList"></ul>
+                @*Nhân thông tin *@
+                <div style="display:flex;">
+                    <div class="kieu">
+                        <input class="thongtincanhan" onblur="validateName();" type="text" id="name" placeholder="Tên khách hàng ..."> <br />
+                        <span style="color:red" id="errorten"></span>
+                    </div>
+                    <div class="kieu">
+                        <input class="thongtincanhan" onblur="validateSDT();" type="text" id="sdt" placeholder="SDT khách hàng ..."> <br />
+                        <span style="color:red" id="errorsdt"></span>
+                    </div>
+                    <div class="kieu">
+                        <input class="thongtincanhan" onchange="TruyenEmail();" onblur="validateEmail();" oni type="text" id="email" placeholder="Email khách hàng ..."> <br />
+                        <span style="color:red" id="erroremail"></span>
+                    </div>
+                </div>
+            </div>
+            <div id="DanhSachPhanTrang">
+                <div class="row" id="timkiem">
+                    <div class="col-md-8">
+                        <input class="form-control" placeholder="Tên sản phẩm" id="tukhoa" />
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary" onclick="TimKiemSpTaiQuay();"><i class="fas fa-search"></i> Tìm kiếm</button>
+                    </div>
+                </div>
+                <ul class="nav nav-pills" style="margin-bottom: 1%;">
+                    <li class="active"><a data-toggle="pill" href="#sanpham1">Sản phẩm</a></li>
+                    <li><a data-toggle="pill" href="#sanphamsale">Sản phẩm sale</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="sanpham1" class="tab-pane fade in active">
+                        <div id="ThongTinSanPham">
+                            @* Hiển thị sản phẩm*@
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 text-center"></div>
+                            <div class="col-md-6 text-center">
+                                <div class="block-27">
+                                    <ul id="phantrang" class="pagination">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="myModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" style="font-weight: bolder;font-size: 30px;">
+                                            Thông tin sản phẩm
+                                        </h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5 id="productId" style="display:none;"></h5>
+                                        <h5 id="nhanidhd" style="display:none;"></h5>
+                                        <iframe id="productIframe" src="" style="width: 100%; height: 700px;"></iframe>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @* Sản phẩm sale *@
+                    <div id="sanphamsale" class="tab-pane fade">
+                        <div id="salesanpham">
+                            @* Hiển thị sản phẩm*@
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 text-center"></div>
+                            <div class="col-md-6 text-center">
+                                <div class="block-27">
+                                    <ul id="phantrang1" class="pagination1">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="myModalSale">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" style="font-weight: bolder;font-size: 30px;">
+                                            Thông tin sản phẩm
+                                        </h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5 id="productIdsale" style="display:none;"></h5>
+                                        <h5 id="nhanidhd" style="display:none;"></h5>
+                                        <iframe id="productIframe" src="" style="width: 100%; height: 700px;"></iframe>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="HoaDonCho" id="HoaDonCho">
+                <div class="row" style="margin-bottom: 5px;">
+                    <div class="col-md-9">
+                        <input id="timkiemhd" class="form-control" placeholder="Nhập mã hoá đơn hoặc tên hoặc sdt" />
+                    </div>
+                    <div class="col-md-3">
+                        <button id="TaoHoaDon" onclick="TimKiemHoaDonCho();" class="btn btn-primary"><i class="fas fa-search" style="color: #ffffff;"></i> Tìm kiếm</button>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                    <th>STT</th>
+                    <th style="display:none;">ID</th>
+                    <th>Mã Hóa đơn</th>
+                    <th>Tên Khách hàng</th>
+                    <th>SDT</th>
+                    <th></th>
+                    </thead>
+                    <tbody id="tbody_hoadoncho">
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="ThanhToan" id="ThanhToan">
+                <div class="row" style="display:none;">
+                    <div class="col-md-4">
+                        <label>Thành tiền: </label>
+                    </div>
+                    <div class="col-md-8">
+                        <label id="thanhtien"></label>
+                    </div>
+                </div>
+                <div class="row" style="display:none;">
+                    <div class="col-md-4">
+                        <label>Khuyến mại: </label>
+                    </div>
+                    <div class="col-md-8">
+                        <label id="khuyenmai"></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Thanh toán: </label>
+                    </div>
+                    <div class="col-md-8">
+                        <label id="thanhtoanhd"></label>
+                    </div>
+                </div>
+
+                <div id="tienkhachdua1">
+                    <div class="row">
+                        <label class="col-md-4">Tiền khách đưa: </label>
+                        <label class="col-md-4"></label>
+                        <input class="col-md-4" id="Tienkhachdua" type="text" onkeyup="VND();" onchange="TienTraKhach();" value="" style="text-align: right;width: 150px;" />
+
+                        <span id="errorTienKhachDua" style="color:red;"></span>
+                    </div>
+                </div>
+                <div id="tientrakhach1">
+                    <div class="row">
+                        <label class="col-md-4">Tiền trả khách: </label>
+                        <label class="col-md-4"></label>
+                        <span class="col-md-4" id="tientrakhach" style="text-align:right"> </span>
+                    </div>
+                </div>
+                <form action="" id="HinhThucThanhToan" class="HinhThucThanhToan">
+                </form>
+                <div id="btnthanhtoanquay" style="right: 1%;bottom: 0px;width: 120px;position: absolute;">
+                    <button id="button_thanhtoan" class="btn btn-primary" onclick="Thanhtoantaiquay();">Thanh toán</button>
+                    <a href="/Admin/BanHangTaiQuay/ThanhToanOnline" id="button_thanhtoanon" class="btn btn-primary">Thanh toán</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/danhsachsanpham/jquery/jquery.min.js"></script>
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/layout/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/adminlte.js"></script>
+<script src="~/js/banhangtaiquay/banhang.js"></script>
+<script src="~/js/giohang/giohang.js"></script>
+<script src="~/js/danhsachsanpham/danhsachsanpham.js"></script>
+<script type="text/javascript">
+    GetHoaDonCho();
+    LoadDanhSachSanPham();
+    LoadDanhSachSanPhamSale();
+    DanhSachHinhThucJson1();
+    const btnThanhToan = document.getElementById('button_thanhtoan');
+    const btn_online = document.getElementById('button_thanhtoanon');
+    const tienkhachdua = document.getElementById('tienkhachdua1');
+    const tientrakhach = document.getElementById('tientrakhach1');
+
+    button_thanhtoan.style.display = 'block';
+    button_thanhtoanon.style.display = 'none';
+    tienkhachdua.style.display = 'none';
+    tientrakhach.style.display = 'none';
+
+    var DanhSachPhanTrang = document.getElementById("DanhSachPhanTrang");
+    DanhSachPhanTrang.classList.add("hidden");
+
+    var ThanhToan = document.getElementById("ThanhToan");
+    ThanhToan.classList.add("hidden");
+    var danhsachsanphamhdct = document.getElementById("danhsachsanphamhdct");
+    danhsachsanphamhdct.classList.add("hidden");
+
+    var HoaDonChiTiet = document.getElementById("HoaDonChiTiet");
+    HoaDonChiTiet.classList.add("hidden");
+
+    var ThongTin = document.getElementById("ThongTin");
+    ThongTin.classList.remove("hidden");
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function VND() {
+        var input = document.getElementById("Tienkhachdua").value.replace(/\./g, ''); // Loại bỏ dấu chấm để tính toán
+        if (isNaN(input)) {
+            document.getElementById("Tienkhachdua").value = ''; // Nếu không phải số, làm trống ô nhập liệu
+        } else {
+            var formattedValue = numberWithCommas(input);
+            document.getElementById("Tienkhachdua").value = formattedValue;
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var paginationLinks = document.querySelectorAll('#phantrang .pagination li a');
+
+        paginationLinks.forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                // Remove 'active' class from all links
+                paginationLinks.forEach(function (link) {
+                    link.classList.remove('active');
+                });
+
+                // Add 'active' class to the clicked link
+                this.classList.add('active');
+            });
+        });
+
+    });
+</script>

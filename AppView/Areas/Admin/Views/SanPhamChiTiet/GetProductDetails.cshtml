@@ -1,0 +1,223 @@
+﻿@model IEnumerable<AppData.Entities.ViewModels.SanPhamChiTietViewModel>
+@{
+    ViewData["Title"] = "GetProductDetails";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o94origin=" anonymous" referrerpolicy="no-referrer" />
+<script type="text/javascript" src="~/js/layout/jquery.min.js"></script>
+<link href="~/js/danhsachsanpham/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/js/danhsachsanpham/datatables-buttons/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/js/danhsachsanpham/datatables-bs4/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+<style>
+    .pagination {
+        margin-top: 10px;
+        margin-left: 39%;
+        text-align: center;
+    }
+
+        .pagination button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+    button.btn.btn-primary {
+        width: 100px;
+        height: 44px;
+        margin-bottom: 10px;
+    }
+
+    .tooltip-custom .tooltiptext {
+        visibility: hidden;
+        width: 600px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+        .tooltip-custom .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%; /* At the bottom of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: black transparent transparent transparent;
+        }
+
+    .tooltip-custom:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .pagination-button {
+        background-color: #f0f0f0; /* Màu nền mặc định cho các nút */
+        border-color: #f0f0f0;
+        color: black; /* Màu chữ mặc định cho các nút */
+    }
+
+        .pagination-button.current {
+            background-color: #44b6e1; /* Màu nền cho nút hiện tại */
+            border-color :#44b6e1;
+            color: white; /* Màu chữ cho nút hiện tại */
+        }
+</style>
+
+<form style="margin-top: 20px;">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            <input id="tukhoa" placeholder="Nhập tên sản phẩm" class="form-control" />
+        </div>
+        <div class="col-mf-2">
+            <button class="btn btn-primary" onclick="SanphamchitiethoanthienTheoTen(event);" style="margin-left: 7px;">Tìm kiếm</button>
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div>
+</form>
+<div id="timkiemnangcao">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" id="lstMauSac">
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" id="lstSize">
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" id="lstTheLoai">
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" id="lstThuongHieu">
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary" onclick="TimKiemNangCao();">Lọc</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-4">
+            <input id="GiaTriMin" type="text" onblur="TruyenGiaTriMinAdmin();" onkeyup="VNDMin();" placeholder="Từ" type="number" class="form-control" /> @* *@
+        </div>
+        <div class="col-md-4">
+            <input id="GiaTriMax" type="text" onkeyup="VNDMax();" onblur="TruyenGiaTriMaxAdmin();" placeholder="Đến" type="number" class="form-control" />  @*  *@
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary" onclick="TimkiemTheoGia();">Lọc</button>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="display:flex">
+                        <h3 style="font-weight: bolder;float: left;">Danh sách sản phẩm</h3>
+                        <a href="/Admin/SanPhamChiTiet/Create" class="btn btn-primary" style="right: 1%;position: absolute;"><i class="fas fa-plus-square" style="color: #ffffff;"></i> Thêm mới</a>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr class="table-active">
+                                    <th style="display:none;">ID</th>
+                                    <th>Mã sản phẩm</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Màu sắc</th>
+                                    <th>Size</th>
+                                    <th>Thương hiệu</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá bán</th>
+                                    <th>Loại sản phẩm</th>
+                                    <th style="width: 360px;">Ảnh</th>
+                                    <th>Trạng thái</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="DanhSachSPCT">
+                            </tbody>
+                        </table>
+                        <div class="pagination" id="pagination">
+                            <button onclick="previousPage()">Previous</button>
+                            <!-- Số trang sẽ được thêm vào đây bằng JavaScript -->
+                            <button onclick="nextPage()">Next</button>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/js/danhsachsanpham/jquery/jquery.min.js"></script>
+<script src="~/js/danhsachsanpham/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="~/js/danhsachsanpham/datatables-responsive/js/datatables.responsive.min.js"></script>
+<script src="~/js/danhsachsanpham/datatables-bs4/js/datatables.bootstrap4.min.js"></script>
+<script src="~/js/danhsachsanpham/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/danhsachsanpham/danhsachsanpham.js"></script>
+<script>
+    Sanphamchitiethoanthien();
+    DanhSachMauSac();
+    DanhSachSize();
+    DanhSachGia();
+    DanhSachTheLoai();
+    DanhSachThuongHieu();
+    $(function () {
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+
+    function VNDMin() {
+        var inputElement = document.getElementById("GiaTriMin");
+        var GiaTriMin = inputElement.value.replace(/[^0-9]/g, ''); // Loại bỏ tất cả các ký tự không phải số
+        if (isNaN(GiaTriMin)) {
+            inputElement.value = ''; // Nếu không phải số, làm trống ô nhập liệu
+        } else {
+            var formattedValue = numberWithCommas(GiaTriMin);
+            inputElement.value = formattedValue;
+        }
+    }
+
+    function VNDMax() {
+        var inputElement = document.getElementById("GiaTriMax");
+        var GiaTriMax = inputElement.value.replace(/[^0-9]/g, ''); // Loại bỏ tất cả các ký tự không phải số
+        if (isNaN(GiaTriMax)) {
+            inputElement.value = ''; // Nếu không phải số, làm trống ô nhập liệu
+        } else {
+            var formattedValue = numberWithCommas(GiaTriMax);
+            inputElement.value = formattedValue;
+        }
+    }
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+</script>

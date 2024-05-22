@@ -1,0 +1,165 @@
+﻿@model AppData.Entities.Models.NguoiDung
+
+@{
+    ViewData["Title"] = "DangKyNhanVien";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link href="~/css/layout/adminlte.min.css" rel="stylesheet" />
+<link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" />
+<style>
+    div#lstVoucher {
+        display: none;
+    }
+
+
+</style>
+<section class="content"> 
+    <div class="">
+        <div class="">
+            <form action="~/Admin/QLNguoiDung/DangKyNhanVien" method="post" style="width: 800px;margin: auto;">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @* <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+                </div>*@
+                <div class="form-group">
+                    <div class="row">
+                        <label for="TenNguoiDung" class="control-label col-md-3">Tên người dùng</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.TenNguoiDung, new { @class = "form-control"})
+                        <span asp-validation-for="TenNguoiDung" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="NgaySinh" class="control-label col-md-3">Ngày sinh</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.NgaySinh, new {type = "date" , @class = "form-control" })
+                        
+                        <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="IdChucVu" class="control-label col-md-3">Chức vụ:</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownList("IdChucVu", ViewBag.chucvu  as IEnumerable<SelectListItem>, "", new { @class = "form-control" })
+                    </div>
+                </div>
+                @*  <div class="form-group">
+                <div class="row">
+                <label for="TenNguoiDung" class="control-label col-md-3">Tên người dùng</label>
+                </div>
+                <div class="col-md-9">
+                </div>
+                <label asp-for="Anh" class="control-label"></label>
+                <input asp-for="Anh" type="file" class="form-control" />
+                <span asp-validation-for="Anh" class="text-danger"></span>
+                </div>*@
+                <div class="form-group">
+                    <div class="row">
+                        <label for="SDT" class="control-label col-md-3">Số điện thoại: </label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.SDT, new { @class = "form-control", id = "SDT", onblur = "onblur=validateSDT();" })
+                        <span id="errorsdt" style="color:red;"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="Email" class="control-label col-md-3">Email: </label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", id = "Email", onblur = "validateEmailDangNhap();" })
+                        <span id="erroremail" style="color:red;"></span>
+                    </div>
+                </div>
+                @*<div class="form-group">
+                <div class="row">
+                <label for="MatKhau" class="control-label col-md-3">Mật khẩu: </label>
+                </div>
+                <div class="col-md-9">
+                @Html.TextBoxFor(m => m.MatKhau, new { @class = "form-control" })
+                <span asp-validation-for="MatKhau" class="text-danger"></span>
+                </div>
+                </div>*@
+                @*    <div class="form-group">
+                <label asp-for="QuanHuyen" class="control-label"></label>
+                <input asp-for="QuanHuyen" class="form-control" />
+                <span asp-validation-for="QuanHuyen" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                <label asp-for="TinhThanh" class="control-label"></label>
+                <input asp-for="TinhThanh" class="form-control" />
+                <span asp-validation-for="TinhThanh" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                <label asp-for="PhuongXa" class="control-label"></label>
+                <input asp-for="PhuongXa" class="form-control" />
+                <span asp-validation-for="PhuongXa" class="text-danger"></span>
+                </div>
+                q         <div class="form-group">
+                <label asp-for="DiaChi" class="control-label"></label>
+                <input asp-for="DiaChi" class="form-control" />
+                <span asp-validation-for="DiaChi" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                <label asp-for="TrangThai" class="control-label"></label>
+                <input asp-for="TrangThai" class="form-control" />
+                <span asp-validation-for="TrangThai" class="text-danger"></span>
+                </div>*@
+                <div class="form-group">
+                    <input type="submit" id="themmoi" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+            <div><a href="~/Admin/QLNguoiDung/DanhSachNguoiDung"><i class="fas fa-arrow-circle-left" style="color: #005eff;"></i></a></div>
+        </div>
+    </div>
+</section>
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/layout/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/adminlte.js"></script>
+<script src="~/js/layout/layout.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        validateInputSDT();
+        validateInputEmail();
+    });
+    function validateInput() {
+        var tensanphamInput = document.getElementById("SDT");
+        var themMoiButton = document.getElementById("themmoi");
+        var tensanphamValue = tensanphamInput.value.trim();
+        var errorTenSanpham = document.getElementById("errorsdt");
+
+        if (tensanphamValue === "") {
+            validateSDT();;
+            themMoiButton.disabled = true;
+        } else {
+            errorTenSanpham.innerText = "";
+            themMoiButton.disabled = false;
+        }
+    }
+    function validateInputEmail() {
+        var tensanphamInput = document.getElementById("Email");
+        var themMoiButton = document.getElementById("themmoi");
+        var tensanphamValue = tensanphamInput.value.trim();
+        var errorTenSanpham = document.getElementById("erroremail");
+
+        if (tensanphamValue === "") {
+            validateEmailDangNhap();
+            themMoiButton.disabled = true;
+        } else {
+            errorTenSanpham.innerText = "";
+            themMoiButton.disabled = false;
+        }
+    }
+   
+    
+</script>

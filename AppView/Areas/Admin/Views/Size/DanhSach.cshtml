@@ -1,0 +1,41 @@
+﻿@model IEnumerable<AppData.Entities.Models.Size>
+
+@{
+    ViewData["Title"] = "DanhSach";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    <a href="~/Admin/Size/Create" class="btn btn-primary" style="margin: 15px 8px 8px 50px;"><i class="fas fa-plus-square"></i> Thêm mới</a>
+</p>
+@if(Model == null)
+{
+    <span>Không có dữ liệu</span>
+} else {
+    <table class="table table-bordered" style="width: 500px;margin: 0px 8px 8px 50px;">
+        <thead>
+            <tr class="table-active">
+                <th style="display : none;">
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th>
+                    Size
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="display : none;">
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SizeNumber)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

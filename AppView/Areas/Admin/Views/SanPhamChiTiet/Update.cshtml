@@ -1,0 +1,294 @@
+﻿@model AppData.Entities.Models.SanPhamChiTiet
+
+@{
+    ViewData["Title"] = "Cập nhật sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var dataanh = ViewBag.listanh;
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link href="~/js/layout/adminlte/select2/css/select2.min.css" rel="stylesheet" />
+<link href="~/js/layout/adminlte/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+<hr />
+<style>
+    .col-md-4.anh {
+        margin: 5px;
+    }
+
+    .close:hover {
+        opacity: 0.9;
+    }
+
+    span.select2-selection.select2-selection--single {
+        height: 40px;
+    }
+</style>
+<div class="">
+    <div class="">
+        <form action="~/Admin/SanPhamChiTiet/Update" method="post" enctype="multipart/form-data" style="width: 1200px; margin: auto;">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="display:none;">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="ID" class="control-label">ID</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.ID, new { @class = "form-control", id = "idspct" })
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IDSP" class="control-label">Sản phẩm</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownList("IDSP", ViewBag.SanPham as IEnumerable<SelectListItem>, "", new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.IDSP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IDSize" class="control-label">Size</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownList("IDSize", ViewBag.Size as IEnumerable<SelectListItem>, "", new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.IDSize, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IDMauSac" class="control-label">Màu sắc</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownList("IDMauSac", ViewBag.MauSac as IEnumerable<SelectListItem>, "", new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.IDMauSac, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IDThuongHieu" class="control-label">Thương hiệu</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownList("IDThuongHieu", ViewBag.ThuongHieu as IEnumerable<SelectListItem>, "", new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.IDThuongHieu, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="MaSPCT" class="control-label">Mã sản phẩm</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.MaSPCT, new { @class = "form-control" })
+                        <span asp-validation-for="MaSPCT" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="LoaiSanPham" class="control-label">Loại sản phẩm</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.LoaiSanPham, new { @class = "form-control" })
+                        <span asp-validation-for="LoaiSanPham" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="SoLuong" class="control-label">Số lượng</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.SoLuong, new { type = "number", @class = "form-control" })
+                        <span asp-validation-for="SoLuongSoLuong" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="GiaBan" class="control-label">Giá bán</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.GiaBan, new { @class = "form-control" })
+                        <span asp-validation-for="GiaBan" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            @*bắt đầu *@
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IdAnh" class="control-label">Ảnh sản phẩm</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary" style="margin-top:8px;" data-bs-toggle="modal" data-bs-target="#myModal">
+                                    Chọn ảnh
+                                </button>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" id="imageFilename" name="imageFilename" class="form-control" />
+                            </div>
+                            <div class="col-md-2">
+                            </div>
+                            <div id="DanhSachAnhCuaSanPham" class="col-md-10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Kho ảnh</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="image-row">
+                                <div class="row">
+                                    @foreach (var image in dataanh)
+                                    {
+                                        <div class="col-md-2">
+                                            <div class="image-item">
+                                                <input type="checkbox" class="image-checkbox" data-image-filename="@image.DuongDan" />
+                                                <img src="@Url.Action("DisplayImage", "Anh", new { DuongDan = image.DuongDan })" alt="Image" class="selectable-image" data-image-id="@image.ID" data-image-filename="@image.DuongDan" style="width: 50%;" />
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="selectImageBtn">Select</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            @*kết thúc*@
+            <div class="form-group">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="Mota" class="control-label">Mô tả</label>
+                        </div>
+                        <div class="col-md-7">
+                            <section class="content">
+                                <div class="container-fluid">
+                                    <div class="card card-primary card-outline">
+                                        <div class="form-group">
+                                            <textarea id="compose-textarea" class="form-control" style="height: 500px">
+
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="GiaBan" class="control-label">Trạng thái</label>
+                    </div>
+                    <div class="col-md-9">
+                        <select id="trangThai" class="form-control">
+                            <option value="-1">Chọn trạng thái</option>
+                            <option value="1">Còn hàng</option>
+                            <option value="0">Hết hàng</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Cập nhật" class="btn btn-primary" />
+            </div>
+        </form>
+        <div>
+            <a href="~/Admin/SanPhamChiTiet/GetProductDetails"><i class="fas fa-arrow-circle-left" style="color: #005eff;"></i></a>
+        </div>
+    </div>
+   
+</div>
+
+
+
+<script src="~/js/danhsachsanpham/jquery/jquery.min.js"></script>
+<!-- jQuery -->
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/layout/adminlte/select2/js/select2.full.min.js"></script>
+<script src="~/js/anh/anh.js"></script>
+<script src="~/js/danhsachsanpham/danhsachsanpham.js"></script>
+<script>
+    LoadMoTa();
+    LoadAnhCuaSanPham();
+    document.addEventListener('DOMContentLoaded', function () {
+        TruyenMoTa();
+        var selectElement = document.getElementById('trangThai');
+        selectElement.addEventListener('change', function () {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/SanPhamChiTiet/NhanTrangThai',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(selectElement.value),
+                success: function (result) {
+                },
+                error: function (error) {
+                    console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+                },
+
+            });
+        });
+    });
+    TruyenMoTa();
+    function TruyenMoTa() {
+        var textarea = document.getElementById('compose-textarea');
+        textarea.addEventListener('input', function () {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/SanPhamChiTiet/NhanMoTaSanPham', // Điều chỉnh đường dẫn tùy thuộc vào định tuyến của bạn
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(textarea.value),
+                success: function (result) {
+
+                },
+                error: function (error) {
+                    console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+                }
+            });
+            console.log(textarea.value);
+        });
+    };
+    $('.select2').select2();
+</script>

@@ -1,0 +1,239 @@
+﻿@{
+    ViewData["Title"] = "Thống kê";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var TongHoaDonBiHuy = ViewBag.TongHoaDonBiHuy;
+    var TongDoanhThu = ViewBag.TongDoanhThu;
+    var TongSoLuongHoaDonThanhCong = ViewBag.TongSoLuongHoaDonThanhCong;
+
+}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+<link href="~/css/layout/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+<link href="~/css/adminlte/adminlte.min.css" rel="stylesheet" />
+
+
+<section class="content">
+    <div class="container-fluid" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@TongDoanhThu.ToString("N0") đ</h3>
+
+                        <p>Tổng doanh thu</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>
+
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@TongSoLuongHoaDonThanhCong</h3>
+
+                        <p>Hoá đơn thành công</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@TongHoaDonBiHuy</h3>
+
+                        <p>Hoá đơn bị huỷ</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+
+                </div>
+            </div>
+            <!-- ./col -->
+            @* <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>65</h3>
+
+                        <p>Unique Visitors</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+
+                </div>
+            </div> *@
+            <!-- ./col -->
+        </div>
+
+
+
+        @*
+        Bieu do tron *@
+        <div class="row">
+            <div class="col-md-6">
+                <!-- AREA CHART -->
+                <!-- /.card -->
+                <!-- DONUT CHART -->
+                <div class="card card-danger">
+                    <div class="card-header">
+                        <h3 class="card-title">Top 6 sản phẩm bán chạy nhất</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-danger">
+                    <div class="card-header">
+                        <h3 class="card-title">Top 6 sản phẩm sale bán chạy nhất</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+            <!-- /.col (RIGHT) -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<script src="~/js/giohang/jquery.min.js"></script>
+<script src="~/js/giohang/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/chart.min.js"></script>
+<script src="~/js/layout/adminlte.min.js"></script>
+<script src="~/js/layout/jquery-ui.min.js"></script>
+
+
+<script src="~/js/thongke/thongke.js"></script>
+<script>
+
+    $(function () {
+        // Get context with jQuery - using jQuery's .get() method.
+        var labels = [];
+        var dataValues = [];
+
+        var labelsthongke = [];
+        var dataValuesthongke = [];
+
+        // Top10SanPhamSaleBanChayNhat();
+        $.ajax({
+            type: 'GET',
+            url: '/Admin/ThongKe/Top10SanPhamBanChayNhat',// Điều chỉnh đường dẫn tùy thuộc vào định tuyến của bạn
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    let product = result[i].tensanpham;
+                    let quantity = result[i].soluongban;
+                    labels.push(product);
+                    dataValues.push(quantity);
+                }
+                var donutChartCanvas = $('#donutChart').get(0).getContext('2d');
+                var donutData = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: dataValues,
+                            backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],  //
+                        }
+                    ]
+                }
+                var donutOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                new Chart(donutChartCanvas, {
+                    type: 'doughnut',
+                    data: donutData,
+                    options: donutOptions
+                })
+
+                console.log(result);
+                console.log(labels);
+                console.log(dataValues);
+            },
+            error: function (error) {
+                console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+            },
+        });
+
+        
+        //-------------
+        //- tOP 6 SẢN PHẨM SALE BÁN CHẠY NHẤT -
+        //-------------
+        // Get context with jQuery - using jQuery's .get() method.
+        $.ajax({
+            type: 'GET',
+            url: '/Admin/ThongKe/Top10SanPhamSaleBanChayNhat',// Điều chỉnh đường dẫn tùy thuộc vào định tuyến của bạn
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    let productsale = result[i].tensanpham;
+                    let quantitysale = result[i].soluongban;
+                    labelsthongke.push(productsale);
+                    dataValuesthongke.push(quantitysale);
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+                var pieData = {
+                    labels: labelsthongke,
+                    datasets: [
+                        {
+                            data: dataValuesthongke,
+                            backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],  //
+                        }
+                    ]
+                };
+                var pieOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                new Chart(pieChartCanvas, {
+                    type: 'pie',
+                    data: pieData,
+                    options: pieOptions
+                })
+                console.log(result);
+            },
+            error: function (error) {
+                console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+            },
+        });
+       
+    });
+
+</script>

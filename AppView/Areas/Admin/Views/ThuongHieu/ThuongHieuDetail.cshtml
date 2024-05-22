@@ -1,0 +1,28 @@
+﻿@model AppData.Entities.Models.ThuongHieu
+
+@{
+    ViewData["Title"] = "ThuongHieuDetail";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TenThuongHieu)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TenThuongHieu)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a href="@Url.Action("Edit", "ThuongHieu", new { Id = Model.ID })" style="text-decoration: none;"><i class="fas fa-edit"></i></a>
+    <a href="~/Admin/ThuongHieu/DanhSach">Quay lại</a>
+</div>

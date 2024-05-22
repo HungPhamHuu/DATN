@@ -1,0 +1,215 @@
+﻿@model IEnumerable<AppData.Entities.Models.SanPham>
+
+@{
+    ViewData["Title"] = "DanhSach";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var stt = 0;
+}
+<style>
+    button {
+        margin-left: 2%;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+
+    .pagination-button {
+        background-color: #f0f0f0; /* Màu nền mặc định cho các nút */
+        border-color: #f0f0f0;
+        color: black; /* Màu chữ mặc định cho các nút */
+    }
+
+        .pagination-button.current {
+            background-color: #44b6e1; /* Màu nền cho nút hiện tại */
+            border-color: #44b6e1;
+            color: white; /* Màu chữ cho nút hiện tại */
+        }
+</style>
+
+@if (Model == null)
+{
+    <span>Không có dữ liệu</span>
+}
+else
+{
+    <table class="table table-bordered" style="width: 1200px;margin: auto;">
+        <thead>
+            <tr class="table-active">
+                <th style="display:none;">
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th style="width: 50px;">
+                    STT
+                </th>
+                <th style="width: 350px;">
+                    Tên sản phẩm
+                </th>
+                <th style="width: 150px;">
+                    Khối lượng
+                </th>
+                <th style="width: 150px;">
+                    Trạng thái
+                </th>
+                <th style="width: 110px;">
+                    <a href="~/Admin/SanPham/Create" style="margin: 8px;" class="btn btn-primary"><i class="fas fa-plus-square"></i> Thêm mới</a>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="DanhSachSP">
+            @foreach (var item in Model)
+            {
+
+                var so = stt++;
+                <tr>
+                    <td style="display:none;">
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @so
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenSanPham)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.KhoiLuong)
+                    </td>
+                    <td>
+                        @if (item.TrangThai == 1)
+                        {
+                            <span>Còn hàng</span>
+                        }
+                        else
+                        {
+                            <span>Hết hàng</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Update", "SanPham", new { id = item.ID })" style="text-decoration:none;"><i class="fas fa-edit"></i></a>
+                        <a href="@Url.Action("Delete", "SanPham", new { id = item.ID })" style="text-decoration:none;"><i class="fas fa-trash" style="color:red;"> </i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="pagination" id="pagination" style="margin: auto;margin-top: 2%;width: 400px;">
+        <button onclick="previousPage()">Previous</button>
+        <!-- Số trang sẽ được thêm vào đây bằng JavaScript -->
+        <button onclick="nextPage()">Next</button>
+    </div>
+}
+<script src="~/js/danhsachsanpham/jquery/jquery.min.js"></script>
+<script>
+    PhanTrangChoSanPham();
+
+    function PhanTrangChoSanPham() {
+        // Số dòng dữ liệu mỗi trang
+        const rowsPerPage = 15;
+        const allRows = document.querySelectorAll("#DanhSachSP tr");
+        let currentPage = 0;
+        showPage(0);
+
+        function showPage(pageIndex) {
+            allRows.forEach(row => {
+                row.style.display = "none";
+            });
+
+            const startIndex = pageIndex * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+
+            for (let i = startIndex; i < endIndex; i++) {
+                if (allRows[i]) {
+                    allRows[i].style.display = "table-row";
+                }
+            }
+
+            currentPage = pageIndex;
+            renderPaginationButtons();
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                showPage(currentPage - 1);
+            }
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            if (currentPage < totalPages - 1) {
+                showPage(currentPage + 1);
+            }
+        }
+
+        function renderPaginationButtons() {
+            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            const paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = "";
+
+            const prevButton = document.createElement("button");
+            prevButton.textContent = "Previous";
+            prevButton.onclick = previousPage;
+            prevButton.classList.add("pagination-button");
+            paginationContainer.appendChild(prevButton);
+
+            if (totalPages <= 5) {
+                for (let i = 0; i < totalPages; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i + 1;
+                    pageButton.onclick = () => showPage(i);
+                    pageButton.classList.add("pagination-button");
+                    if (i === currentPage) {
+                        pageButton.classList.add("current");
+                    }
+                    paginationContainer.appendChild(pageButton);
+                }
+            } else {
+                let startPage, endPage;
+                if (currentPage <= 2) {
+                    startPage = 0;
+                    endPage = 4;
+                } else if (currentPage >= totalPages - 3) {
+                    startPage = totalPages - 5;
+                    endPage = totalPages - 1;
+                } else {
+                    startPage = currentPage - 2;
+                    endPage = currentPage + 2;
+                }
+
+                if (startPage > 0) {
+                    const ellipsisStart = document.createElement("button");
+                    ellipsisStart.textContent = "...";
+                    ellipsisStart.disabled = true;
+                    ellipsisStart.classList.add("pagination-button");
+                    paginationContainer.appendChild(ellipsisStart);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i + 1;
+                    pageButton.onclick = () => showPage(i);
+                    pageButton.classList.add("pagination-button");
+                    if (i === currentPage) {
+                        pageButton.classList.add("current");
+                    }
+                    paginationContainer.appendChild(pageButton);
+                }
+
+                if (endPage < totalPages - 1) {
+                    const ellipsisEnd = document.createElement("button");
+                    ellipsisEnd.textContent = "...";
+                    ellipsisEnd.disabled = true;
+                    ellipsisEnd.classList.add("pagination-button");
+                    paginationContainer.appendChild(ellipsisEnd);
+                }
+            }
+
+            const nextButton = document.createElement("button");
+            nextButton.textContent = "Next";
+            nextButton.onclick = nextPage;
+            nextButton.classList.add("pagination-button");
+            paginationContainer.appendChild(nextButton);
+        }
+    }
+</script>

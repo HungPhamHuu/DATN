@@ -1,0 +1,128 @@
+﻿@model AppData.Entities.Models.Voucher
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link href="~/css/layout/adminlte.min.css" rel="stylesheet" />
+<link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" />
+<section class="content">
+    <div class="">
+        <div class="">
+            <form action="~/Admin/Voucher/Create" method="post" style="width: 800px; margin: auto;">
+                <div asp-validation-summary="ModelOnly" class="text-danger" enctype="multipart/form-data"></div>
+                @* <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+                </div>*@
+                <div class="form-group">
+                    <div class="row">
+                        <label for="MaVoucher" class="control-label col-md-3">Mã Voucher</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.MaVoucher, new { @class = "form-control" })
+                        <span asp-validation-for="MaVoucher" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="form-group" style="display:none;">
+                    <div class="row">
+                        <label for="NgayTao" class="control-label col-md-3">Ngày Tạo</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.NgayTao, new { type = "date", @class = "form-control" })
+
+                        <span asp-validation-for="NgayTao" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="NgayBatDau" class="control-label col-md-3">Ngày Bắt Đầu</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.NgayBatDau, new { type = "date", @class = "form-control" })
+
+                        <span asp-validation-for="NgayBatDau" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="NgayKetThuc" class="control-label col-md-3">Ngày Kết Thúc</label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.NgayKetThuc, new { type = "date", @class = "form-control" })
+
+                        <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="GiaTriVoucher" class="control-label col-md-3">Giá Trị Voucher: </label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.GiaTriVoucher, new { @class = "form-control" })
+                        <span asp-validation-for="GiaTriVoucher" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="DieuKienMin" class="control-label col-md-3">Điều Kiện Min: </label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.DieuKienMin, new { @class = "form-control" })
+                        <span asp-validation-for="DieuKienMin" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="DieuKienMax" class="control-label col-md-3">Điều Kiện Max: </label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.DieuKienMax, new { @class = "form-control" })
+                        <span asp-validation-for="DieuKienMax" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="SoLuong" class="control-label col-md-3">Số Lượng: </label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.SoLuong, new { @class = "form-control" })
+                        <span asp-validation-for="SoLuong" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label for="MoTa" class="control-label col-md-3">Mô Tả: </label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.MoTa, new { @class = "form-control" })
+                        <span asp-validation-for="MoTa" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <div class="row">
+                        <label for="TrangThai" class="control-label col-md-3">Trạng Thái: </label>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.TrangThai, new { @class = "form-control" })
+                        <span asp-validation-for="TrangThai" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+            <div>
+                <a href="~/Admin/Voucher/DanhSach"><i class="fas fa-arrow-circle-left" style="color: #005eff;"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/layout/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/adminlte.js"></script>
+

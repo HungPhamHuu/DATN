@@ -1,0 +1,124 @@
+﻿@model AppData.Entities.ViewModels.SaleChiTietViewModel
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm sale";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #suggestionList {
+        position: absolute;
+        z-index: 1;
+        /* Thêm các thuộc tính cụ thể khác nếu cần */
+    }
+    /* CSS cho ô nhập và danh sách gợi ý */
+    #inputBox {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        min-width: 525px;
+    }
+
+    #suggestionList {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        top: 42px;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        left: 7px;
+        min-width: 751px;
+        background-color: white;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+        #suggestionList li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+            #suggestionList li:hover {
+                background-color: #f4f4f4;
+            }
+</style>
+<hr />
+<div class="row">
+    <div class="">
+        <form style="width: 1200px;position: absolute;top: 8%;left: 29%;">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="display:none;">
+                <label asp-for="IDSalechitiet" class="control-label"></label>
+                <input asp-for="IDSalechitiet" class="form-control" />
+                <span asp-validation-for="IDSalechitiet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IDSale" class="control-label">Chương trình sale</label>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.DropDownList("IDSale", ViewBag.Sale  as IEnumerable<SelectListItem>, "", new { @class = "form-control" , id="idsale" })
+                        <span id="erroridsale" style="color:red"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="IdSanPhamCT" class="control-label">Sản phẩm</label>
+                    </div>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control" id="inputBox" oninput="suggest(event);" placeholder="Tên sản phẩm">
+                        <ul id="suggestionList"></ul>
+                        <div id="thongso" class="thongso" style="margin-top: 20px;">
+                            <div style="display:flex">Màu sắc : <p id="mausac"></p></div>
+                            <div style="display:flex">Size :<p id="size"></p></div>
+                            <div style="display:flex">Tên thương hiệu: <p id="thuonghieu"></p></div>
+                            <div style="display:flex">Loại sản phẩm : <p id="loaisanpham"></p></div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="SoLuong" class="control-label">Số lượng</label>
+                    </div>
+                    <div class="col-md-7">
+                       <input id="soluong" type="number" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button onclick="ThemSanPhamSale();"  class="btn btn-primary">Thêm mới</button>
+            </div>
+        </form>
+    </div>
+    <div><a href="~/Admin/SaleChiTiet/DanhSachTatCaSaleChiTiet"><i class="fas fa-arrow-circle-left" style="color: #005eff;"></i></a></div>
+</div>
+<script src="~/js/danhsachsanpham/jquery/jquery.min.js"></script>
+<script src="~/js/sale/sale.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#idsale").change(function () {
+            var selectedValue = $(this).val();
+            if (selectedValue !== "") {
+                $("#erroridsale").text(selectedValue);
+                $("#erroridsale").css("display", "none");
+            } else {
+                $("#erroridsale").text("Bạn chưa chọn giá trị nào.");
+                return;
+            }
+        });
+    });
+</script>
+
+
+

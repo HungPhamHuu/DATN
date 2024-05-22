@@ -1,0 +1,117 @@
+﻿@model AppData.Entities.Models.SanPham
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<style>
+    div#lstVoucher {
+        display: none;
+    }
+</style>
+<hr />
+<div class="row" style="width:500px;margin:auto;">
+    <div>
+        <form action="~/Admin/SanPham/Update" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <div class="row" style="display:none;">
+                    <div class="col-md-4">
+                        <label>ID</label>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.ID, new { @class = "form-control" })
+                        <span asp-validation-for="ID" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Tên sản phẩm:</label>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.TenSanPham, new { @class = "form-control" })
+                        <span asp-validation-for="TenSanPham" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Khối lượng:</label>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.KhoiLuong, new { @class = "form-control" })
+                        <span asp-validation-for="KhoiLuong" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Trạng thái:</label>
+                    </div>
+                    <div class="col-md-8">
+                        <select id="lstTrangThai" class="form-control">
+                            <option value="">Chọn</option>
+                            <option value="1">Còn hàng</option>
+                            <option value="0">Hết hàng</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div>
+        <a href="~/Admin/SanPham/DanhSach"><i class="fas fa-arrow-circle-left" style="color: #005eff;"></i></a>
+    </div>
+</div>
+
+
+<script src="~/js/danhsachsanpham/jquery/jquery.min.js"></script>
+<!-- jQuery -->
+<script src="~/js/layout/jquery.min.js"></script>
+<script>
+    loadTrangThai();
+    function loadTrangThai() {
+        var id = document.getElementById("ID").value;
+
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/SanPham/SanPhamDetail1',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(id),
+            success: function (result) {
+                console.log(result);
+                document.getElementById("lstTrangThai").value = result.trangThai;
+            },
+            error: function (error) {
+                console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+            },
+
+        });
+    };
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectElement = document.getElementById('lstTrangThai');
+        selectElement.addEventListener('change', function () {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/SanPham/NhanTrangThai',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(selectElement.value),
+                success: function (result) {
+                },
+                error: function (error) {
+                    console.error('Lỗi khi lấy dữ liệu từ Session:', error);
+                },
+            });
+        });
+    });
+    
+</script>
+

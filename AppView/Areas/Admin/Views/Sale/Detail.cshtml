@@ -1,0 +1,518 @@
+﻿@using AppData.Entities.Models;
+@model AppData.Entities.Models.Sale
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var stt = 0;
+    var phamtram = Convert.ToInt32(Model.PhanTramGiam);
+}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link href="~/css/layout/adminlte.min.css" rel="stylesheet" />
+<link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" />
+<style>
+    .tooltip-custom {
+        position: relative;
+        display: inline-block;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+        .tooltip-custom .tooltiptext {
+            visibility: hidden;
+            width: 600px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltip-custom .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%; /* At the bottom of the tooltip */
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: black transparent transparent transparent;
+            }
+
+        .tooltip-custom:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    button {
+        margin-left: 2%;
+    }
+
+    .pagination-button {
+        background-color: #f0f0f0; /* Màu nền mặc định cho các nút */
+        border-color: #f0f0f0;
+        color: black; /* Màu chữ mặc định cho các nút */
+    }
+
+        .pagination-button.current {
+            background-color: #44b6e1; /* Màu nền cho nút hiện tại */
+            border-color: #44b6e1;
+            color: white; /* Màu chữ cho nút hiện tại */
+        }
+</style>
+<div>
+    <dl class="" style="width:800px; margin:auto;">
+        <div class="row" style="display:none;">
+            <div class="col-md-4">ID</div>
+            <div class="col-md-8"> @Html.DisplayFor(model => model.ID)</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">Mã sale</div>
+            <div class="col-md-8"> @Html.DisplayFor(model => model.MaSale)</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">Ngày bắt đầu</div>
+            <div class="col-md-8">   @Model.NgayBatDau.Value.ToString("dd/MM/yyyy")</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">Ngày kết thúc</div>
+            <div class="col-md-8"> @Model.NgayKetThuc.Value.ToString("dd/MM/yyyy")</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">Phần trăm giảm</div>
+            <div class="col-md-8">  @phamtram %</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">Trạng thái</div>
+            <div class="col-md-8">
+                @if (Model.TrangThai == 1)
+                {
+                    <span>Hoạt động</span>
+                }
+                else
+                {
+                    <span>Không hoạt động</span>
+                }
+            </div>
+        </div>
+        <div>
+            <a href="~/Admin/Sale/DanhSach" style="margin-left:15px;"><i class="fas fa-arrow-circle-left" style="color: #005eff;"></i></a>
+            <a href="@Url.Action("Edit", "Sale", new { id = Model.ID  })" style="text-decoration:none;"><i class="fas fa-edit"></i></a>
+        </div>
+    </dl>
+    @{
+        var list = ViewBag.spct as List<SanPhamChiTiet>;
+        if (list != null)
+        {
+
+            <table class="table" style="margin-top: 4%;">
+                <thead>
+                    <tr>
+                        <th colspan="12">Sản phẩm chưa sale</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Mã</th>
+                        <th scope="col">Tên sản phẩm</th>
+                        <th scope="col">Màu sắc</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Thương Hiệu</th>
+                        <th scope="col">Số Lượng</th>
+                        <th scope="col">Giá bán</th>
+                        <th scope="col">Loại sản phẩm</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody id="SanphamChuaSale">
+                    @{
+                        foreach (SanPhamChiTiet item in list)
+                        {
+                            var so = stt + 1;
+                            <tr class="tooltip-custom">
+                                <td>@so</td>
+                                <td>@item.MaSPCT</td>
+                                <td>@item.SanPham.TenSanPham</td>
+                                <td>@item.MauSac.TenMauSac</td>
+                                <td>@item.Size.SizeNumber</td>
+                                <td>@item.ThuongHieu.TenThuongHieu</td>
+                                <td>@item.SoLuong</td>
+                                <td>@item.GiaBan</td>
+                                <td>@item.LoaiSanPham</td>
+                                <td>
+                                    @if (item.TrangThai == 1)
+                                    {
+                                        <span class="badge badge-success">Hoạt động</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-error">Không hoạt động</span>
+                                    }
+                                    <span class="tooltiptext">@item.MoTa</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-create" IDSPCT="@item.ID" IDSALE="@ViewBag.idsl">Thêm vào khuyến mãi</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div class="pagination" id="pagination" style="margin: auto;margin-top: 2%;width: 400px;">
+                <button onclick="previousPage()">Previous</button>
+                <!-- Số trang sẽ được thêm vào đây bằng JavaScript -->
+                <button onclick="nextPage()">Next</button>
+            </div>
+        }
+    }
+    @{
+        var list2 = ViewBag.spct2 as List<SanPhamChiTiet>;
+        if (list2 != null)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="12">Sản phẩm sale</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Mã</th>
+                        <th scope="col">Tên sản phẩm</th>
+                        <th scope="col">Màu sắc</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Thương Hiệu</th>
+                        <th scope="col">Số Lượng</th>
+                        <th scope="col">Giá bán</th>
+                        <th scope="col">Loại sản phẩm</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody id="SanphamSale">
+                    @{
+                        foreach (SanPhamChiTiet item in list2)
+                        {
+                            var so = stt + 1;
+                            <tr class="tooltip-custom">
+                                <th scope="row">@so</th>
+                                <td>@item.MaSPCT</td>
+                                <td>@item.SanPham.TenSanPham</td>
+                                <td>@item.MauSac.TenMauSac</td>
+                                <td>@item.Size.SizeNumber</td>
+                                <td>@item.ThuongHieu.TenThuongHieu</td>
+                                <td>@item.SoLuong</td>
+                                <td>@item.GiaBan</td>
+                                <td>@item.LoaiSanPham</td>
+                                <td>
+                                    @if (item.TrangThai == 1)
+                                    {
+                                        <span class="badge badge-success">Hoạt động</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-error">Không hoạt động</span>
+                                    }
+                                    <span class="tooltiptext">@item.MoTa</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" IDSPCT="@item.ID" IDSALE="@ViewBag.idsl">
+                                        Xóa sản phẩm
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div class="pagination1" id="pagination1" style="margin: auto;margin-top: 2%;width: 400px;">
+                <button onclick="previousPage1()">Previous</button>
+                <!-- Số trang sẽ được thêm vào đây bằng JavaScript -->
+                <button onclick="nextPage1()">Next</button>
+            </div>
+        }
+    }
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/layout/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/adminlte.js"></script>
+<script type="text/javascript">
+    PhanTrangChoSanPhamSale();
+    PhanTrangChoSanPham();
+    $('.btn-create').click(function () {
+        var idSale = $(this).attr('IDSALE');
+        var idSpct = $(this).attr('IDSPCT');
+        $.ajax({
+            url: '/Admin/Sale/AddSlct',
+            type: 'GET',
+            data: {
+                idSale: idSale,
+                idSpct: idSpct
+            },
+            success: function (response) {
+                if (response.success) {
+                    window.location.reload();
+                } else {
+                }
+            },
+            error: function (error) {
+            }
+        });
+    })
+    $('.btn-danger').click(function () {
+        var idSale = $(this).attr('IDSALE');
+        var idSpct = $(this).attr('IDSPCT');
+        $.ajax({
+            url: '/Admin/Sale/DeleteSlct',
+            type: 'GET',
+            data: {
+                idSale: idSale,
+                idSpct: idSpct
+            },
+            success: function (response) {
+                if (response.success) {
+                    window.location.reload();
+                } else {
+                }
+            },
+            error: function (error) {
+            }
+        });
+
+    });
+
+    function PhanTrangChoSanPhamSale() {
+        const rowsPerPage = 5;
+        const allRows = document.querySelectorAll("#SanphamSale tr");
+        let currentPage = 0;
+        showPage(0);
+
+        function showPage(pageIndex) {
+            allRows.forEach(row => {
+                row.style.display = "none";
+            });
+
+            const startIndex = pageIndex * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+
+            for (let i = startIndex; i < endIndex; i++) {
+                if (allRows[i]) {
+                    allRows[i].style.display = "table-row";
+                }
+            }
+
+            currentPage = pageIndex;
+            renderPaginationButtons();
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                showPage(currentPage - 1);
+            }
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            if (currentPage < totalPages - 1) {
+                showPage(currentPage + 1);
+            }
+        }
+
+        function renderPaginationButtons() {
+            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            const paginationContainer = document.getElementById("pagination1");
+            paginationContainer.innerHTML = "";
+
+            const prevButton = document.createElement("button");
+            prevButton.textContent = "Previous";
+            prevButton.onclick = previousPage;
+            prevButton.classList.add("pagination-button");
+            paginationContainer.appendChild(prevButton);
+
+            if (totalPages <= 5) {
+                for (let i = 0; i < totalPages; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i + 1;
+                    pageButton.onclick = () => showPage(i);
+                    pageButton.classList.add("pagination-button");
+                    if (i === currentPage) {
+                        pageButton.classList.add("current");
+                    }
+                    paginationContainer.appendChild(pageButton);
+                }
+            } else {
+                let startPage, endPage;
+                if (currentPage <= 2) {
+                    startPage = 0;
+                    endPage = 4;
+                } else if (currentPage >= totalPages - 3) {
+                    startPage = totalPages - 5;
+                    endPage = totalPages - 1;
+                } else {
+                    startPage = currentPage - 2;
+                    endPage = currentPage + 2;
+                }
+
+                if (startPage > 0) {
+                    const ellipsisStart = document.createElement("button");
+                    ellipsisStart.textContent = "...";
+                    ellipsisStart.disabled = true;
+                    ellipsisStart.classList.add("pagination-button");
+                    paginationContainer.appendChild(ellipsisStart);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i + 1;
+                    pageButton.onclick = () => showPage(i);
+                    pageButton.classList.add("pagination-button");
+                    if (i === currentPage) {
+                        pageButton.classList.add("current");
+                    }
+                    paginationContainer.appendChild(pageButton);
+                }
+
+                if (endPage < totalPages - 1) {
+                    const ellipsisEnd = document.createElement("button");
+                    ellipsisEnd.textContent = "...";
+                    ellipsisEnd.disabled = true;
+                    ellipsisEnd.classList.add("pagination-button");
+                    paginationContainer.appendChild(ellipsisEnd);
+                }
+            }
+
+            const nextButton = document.createElement("button");
+            nextButton.textContent = "Next";
+            nextButton.onclick = nextPage;
+            nextButton.classList.add("pagination-button");
+            paginationContainer.appendChild(nextButton);
+        }
+
+        return;
+    }
+    function PhanTrangChoSanPham() {
+        const rowsPerPage = 5;
+        const allRows = document.querySelectorAll("#SanphamChuaSale tr");
+        let currentPage = 0;
+        showPage(0);
+
+        function showPage(pageIndex) {
+            allRows.forEach(row => {
+                row.style.display = "none";
+            });
+
+            const startIndex = pageIndex * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+
+            for (let i = startIndex; i < endIndex; i++) {
+                if (allRows[i]) {
+                    allRows[i].style.display = "table-row";
+                }
+            }
+
+            currentPage = pageIndex;
+            renderPaginationButtons();
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                showPage(currentPage - 1);
+            }
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            if (currentPage < totalPages - 1) {
+                showPage(currentPage + 1);
+            }
+        }
+
+        function renderPaginationButtons() {
+            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            const paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = "";
+
+            const prevButton = document.createElement("button");
+            prevButton.textContent = "Previous";
+            prevButton.onclick = previousPage;
+            prevButton.classList.add("pagination-button");
+            paginationContainer.appendChild(prevButton);
+
+            if (totalPages <= 5) {
+                for (let i = 0; i < totalPages; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i + 1;
+                    pageButton.onclick = () => showPage(i);
+                    pageButton.classList.add("pagination-button");
+                    if (i === currentPage) {
+                        pageButton.classList.add("current");
+                    }
+                    paginationContainer.appendChild(pageButton);
+                }
+            } else {
+                let startPage, endPage;
+                if (currentPage <= 2) {
+                    startPage = 0;
+                    endPage = 4;
+                } else if (currentPage >= totalPages - 3) {
+                    startPage = totalPages - 5;
+                    endPage = totalPages - 1;
+                } else {
+                    startPage = currentPage - 2;
+                    endPage = currentPage + 2;
+                }
+
+                if (startPage > 0) {
+                    const ellipsisStart = document.createElement("button");
+                    ellipsisStart.textContent = "...";
+                    ellipsisStart.disabled = true;
+                    ellipsisStart.classList.add("pagination-button");
+                    paginationContainer.appendChild(ellipsisStart);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i + 1;
+                    pageButton.onclick = () => showPage(i);
+                    pageButton.classList.add("pagination-button");
+                    if (i === currentPage) {
+                        pageButton.classList.add("current");
+                    }
+                    paginationContainer.appendChild(pageButton);
+                }
+
+                if (endPage < totalPages - 1) {
+                    const ellipsisEnd = document.createElement("button");
+                    ellipsisEnd.textContent = "...";
+                    ellipsisEnd.disabled = true;
+                    ellipsisEnd.classList.add("pagination-button");
+                    paginationContainer.appendChild(ellipsisEnd);
+                }
+            }
+
+            const nextButton = document.createElement("button");
+            nextButton.textContent = "Next";
+            nextButton.onclick = nextPage;
+            nextButton.classList.add("pagination-button");
+            paginationContainer.appendChild(nextButton);
+        }
+
+        return;
+    }
+</script>
+
+

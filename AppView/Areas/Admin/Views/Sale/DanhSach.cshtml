@@ -1,0 +1,168 @@
+﻿@model IEnumerable<AppData.Entities.Models.Sale>
+
+@{
+    ViewData["Title"] = "DanhSach";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link href="~/css/layout/adminlte.min.css" rel="stylesheet" />
+<link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" />
+
+
+<style>
+    .badge-error {
+        color: #fff;
+        background-color: #dd4444;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+    a:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+    button {
+        margin-left: 2%;
+    }
+</style>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1></h1>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<form action="~/Admin/Sale/DanhSach" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-8">
+        </div>
+        @*Lọc theo trạng thái*@
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-8">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<section class="content">
+
+    <div class="card">
+        <div class="card-header">
+            <h3 style="font-weight: bolder;float: left;">Danh sách Sale</h3>
+            <div style="right: 1%;position: absolute;">
+                <a class="btn btn-primary" href="~/Admin/Sale/Create" style="float: left;"><i class="fas fa-plus-square"></i> Thêm mới</a>
+                
+            </div>
+
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    <tr class="table-active">
+                        <th style="width:10%">
+                            Mã Sale
+                        </th>
+                        <th style="width:10%">
+                            Ngày Bắt Đầu
+                        </th>
+                        <th style="width:10%">
+                            Ngày Kết Thúc
+                        </th>
+                        <th style="width:10%">
+                            Phần Trăm Giảm
+                        </th>
+                        <th style="width:10%" class="text-center">
+                            Trạng thái
+                        </th>
+                        <th style="width:1%">
+                        </th>
+                        <th style="width:1%">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="table-user">
+                    @if (Model == null)
+                    {
+                        <tr>
+                            Không có dữ liệu
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+
+                                    @Html.ActionLink(item.MaSale, "Detail", new { Id = @item.ID})
+                                </td>
+                                <td>
+                                    @item.NgayBatDau.Value.Date.ToString("dd-MM-yyyy")
+                                </td>
+                                <td>
+                                    @item.NgayKetThuc.Value.Date.ToString("dd-MM-yyyy")
+                                </td>
+                                <td>
+                                    @item.PhanTramGiam %
+                                </td>
+                                <td class="project-state">
+                                    @if (item.TrangThai == 1)
+                                    {
+                                        <span class="badge badge-success">Hoạt động</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-error">Không hoạt động</span>
+                                    }
+
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "Sale", new { Id = item.ID })" style="text-decoration:none;"><i class="fas fa-edit" style="color:#007bff;"></i></a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Delete", "Sale", new { Id = item.ID })" style="text-decoration:none;"><i class="fas fa-trash" style="color:red;"> </i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+<script src="~/js/nguoidung/qlnguoidung.js"></script>
+<script src="~/js/layout/jquery.min.js"></script>
+<script src="~/js/layout/bootstrap.bundle.min.js"></script>
+<script src="~/js/layout/adminlte.js"></script>
+
+<script>
+    // Truyền ngày
+    document.getElementById("NgayKetThuc").addEventListener("change", function () {
+        var selectedDate = this.value;
+        console.log(selectedDate);
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/SaleChiTiet/NhanNgay',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(selectedDate),
+            success: function (result) {
+                console.log(selectedDate);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+</script>
+
+

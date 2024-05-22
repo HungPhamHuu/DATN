@@ -1,0 +1,70 @@
+﻿@model IEnumerable<AppData.Entities.Models.Anh>
+@using System.Text;
+@{
+    ViewData["Title"] = "DanhSachAnh";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script type="text/javascript" src="~/js/Layout/jquery.min.js"></script>
+<script type="text/javascript" src="~/js/Layout/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="~/js/Layout/ekko-lightbox.min.js"></script>
+<script type="text/javascript" src="~/js/Layout/jquery.filterizr.min.js"></script>
+
+<link type="text/css" href="~/css/Layout/all.min.css" rel="stylesheet" />
+<link type="text/css" href="~/css/Layout/ekko-lightbox.css" rel="stylesheet" />
+<link type="text/css" href="~/css/Layouts/adminlte.min.css" rel="stylesheet" />
+<link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" />
+
+<style>
+    div#lstVoucher {
+        display: none;
+    }
+</style>
+<p>
+    <a href="~/Admin/Anh/UploadImages" class="btn btn-primary" style="margin:10px;">Tải ảnh</a>
+</p>
+
+<div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h4 class="card-title">Kho ảnh sản phẩm</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                @foreach (var item in Model)
+                                {
+                                    <div class="col-sm-2">
+                                        <a href="@item.DuongDan" data-toggle="lightbox" data-title="sample 1 - white" data-gallery="gallery">
+                                            <img src="@Url.Action("DisplayImage", "Anh", new { DuongDan =item.DuongDan })" class="img-fluid mb-2" alt="@item.DuongDan" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+</div>
+<script>
+    $(function () {
+        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+            event.preventDefault();
+            $(this).ekkoLightbox({
+                alwaysShowClose: true
+            });
+        });
+
+        $('.filter-container').filterizr({ gutterPixels: 3 });
+        $('.btn[data-filter]').on('click', function () {
+            $('.btn[data-filter]').removeClass('active');
+            $(this).addClass('active');
+        });
+    })
+</script>
+

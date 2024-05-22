@@ -1,0 +1,123 @@
+﻿@model IEnumerable<AppData.Entities.ViewModels.SanPhamChiTietViewModel>
+
+@{
+    ViewData["Title"] = "DisplayData";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1>DisplayData</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th style="display:none;">
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenSP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Size)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenThuongHieu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MauSac)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaSPCT)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoaiSanPham)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SoLuong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GiaBan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MoTa)
+            </th>
+            <th style="display:none;">
+                @Html.DisplayNameFor(model => model.QrImage)
+            </th>
+            <th style="display:none;">
+                @Html.DisplayNameFor(model => model.TrangThai)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td style="display:none;">
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenSP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Size)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenThuongHieu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MauSac)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaSPCT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoaiSanPham)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SoLuong)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GiaBan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MoTa)
+            </td>
+                <td style="display:none;">
+                @Html.DisplayFor(modelItem => item.QrImage)
+            </td>
+                <td style="display:none;">
+                @Html.DisplayFor(modelItem => item.TrangThai)
+            </td>
+            <td>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<button type="submit" class="btn btn-primary" id="addDataToDatabase">Thêm</button>
+<script type="text/javascript" src="~/js/giohang/jquery.min.js"></script>
+<script type="text/javascript" src="~/js/layout/jquery.min.js"></script>
+<script>
+    $(function () {
+        $("#addDataToDatabase").click(function () {
+            // Gửi yêu cầu AJAX để thêm dữ liệu vào cơ sở dữ liệu
+            $.ajax({
+                url: "/Admin/SanPhamChiTiet/AddDataToDatabase",
+                type: "POST",
+                success: function (result) {
+                    console.log(result.message); 
+                    alert(result.message);
+                    if (result.message == "Thành công") {
+                        window.location.href = '/Admin/SanPhamChiTiet/GetProductDetails';
+                    }
+                },
+                error: function () {
+                    alert("Lỗi khi thêm dữ liệu vào cơ sở dữ liệu.");
+                }
+            });
+        });
+    });
+</script>

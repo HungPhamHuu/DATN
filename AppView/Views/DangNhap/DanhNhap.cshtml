@@ -1,0 +1,144 @@
+﻿@model AppData.Entities.Models.NguoiDung
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome -->
+    <link href="~/css/layout/fontawesome/all.min.css" rel="stylesheet" asp-append-version="true" />
+    <!-- icheck bootstrap -->
+    <link href="~/css/layout/icheck-bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+    <!-- Theme style -->
+    <link href="~/css/layout/adminlte.min.css" rel="stylesheet" asp-append-version="true" />
+    <style>
+        #colorlib-footer {
+            display: none;
+        }
+
+        header {
+            display: none;
+        }
+
+        nav.colorlib-nav {
+            display: none;
+        }
+
+        aside#colorlib-hero {
+            display: none;
+        }
+
+        .colorlib-intro {
+            display: none;
+        }
+
+        div#lstVoucher {
+            display: none;
+        }
+
+        .colorlib-product {
+            display: none;
+        }
+
+        .colorlib-partner {
+            display: none;
+        }
+
+        .login-box, .register-box {
+            top: 50%;
+            left: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+        }
+
+            .login-box .card, .register-box .card {
+                margin-bottom: 0;
+                width: 370px;
+            }
+    </style>
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Sign in to start your session</p>
+
+                <form asp-action="DanhNhap" method="post" enctype="multipart/form-data">
+                    <div class="input-group mb-3">
+                        <input asp-for="Email" class="form-control" placeholder="Email" onblur="validateEmailDangNhap();" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                        <span id="erroremail" style="color:red;"></span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input asp-for="MatKhau" class="form-control" type="password" placeholder="Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="remember">
+                                <label for="remember">
+                                    Remember Me
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+
+                <div class="social-auth-links text-center mb-3">
+                    <p>- OR -</p>
+                    <a href="#" class="btn btn-block btn-primary">
+                        <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+                    </a>
+                    <a href="#" class="btn btn-block btn-danger">
+                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+                    </a>
+                </div>
+                <!-- /.social-auth-links -->
+
+                <p class="mb-1">
+                    <a asp-controller="DangNhap" asp-action="QuenMatKhau">Quên mật khẩu</a>
+                </p>
+                <p class="mb-0">
+                    <a asp-controller="DangNhap" asp-action="DangKyKhachHang" class="text-center">Đăng ký thành viên.</a>
+                </p>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="~/js/layout/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/js/layout/bootstrap.bundle.min.js"></script>
+    <script src="~/js/layout/layout.js"></script>
+    <script src="~/js/layout/main.js"></script>
+    <!-- AdminLTE App -->
+    <script type="text/javascript">
+       
+    </script>
+</body>
+
+</html>
+
+

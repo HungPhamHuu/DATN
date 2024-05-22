@@ -1,0 +1,59 @@
+﻿@model AppData.Entities.Models.SanPham
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    div#lstVoucher {
+        display: none;
+    }
+</style>
+<div class="row" style="margin:15px 0 15px 0;">
+    <div class="col-md-4">
+        <form action="~/Admin/SanPham/Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label for="TenSanPham" class="control-label">Tên Sản Phẩm (<span style="color:red;">*</span>)</label>
+                @Html.TextBoxFor(m => m.TenSanPham, new { @class = "form-control", id = "tensanpham", onblur = "validateInput();" })
+                <span id="errorTenSanpham" style="color:red;"></span>
+            </div>
+            <div class="form-group">
+                <label for="KhoiLuong" class="control-label">Khối Lượng</label>
+                @Html.TextBoxFor(m => m.KhoiLuong, new { @class = "form-control" })
+                <span asp-validation-for="KhoiLuong" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" id="themMoi" value="Thêm mới" class="btn btn-primary" />
+            </div>
+        </form>
+        <div>
+            <a href="~/Admin/SanPham/DanhSach"><i class="fas fa-arrow-circle-left" style="color: #005eff;"></i></a>
+        </div>
+    </div>
+    
+</div>
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        validateInput();
+    });
+    function validateInput() {
+        var tensanphamInput = document.getElementById("tensanpham");
+        var themMoiButton = document.getElementById("themMoi");
+        var tensanphamValue = tensanphamInput.value.trim();
+        var errorTenSanpham = document.getElementById("errorTenSanpham");
+
+        if (tensanphamValue === "") {
+            errorTenSanpham.innerText = "Yêu cầu nhập dữ liệu";
+            themMoiButton.disabled = true;
+        } else {
+            errorTenSanpham.innerText = "";
+            themMoiButton.disabled = false;
+        }
+    }
+</script>
+

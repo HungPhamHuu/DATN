@@ -1,0 +1,219 @@
+﻿@model IEnumerable<AppData.Repositories.ViewModel.SaleChiTietVm>
+
+@{
+    ViewData["Title"] = "DanhSachSale";
+    Layout = "~/Areas/KhachHang/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link href="~/css/layout/animate.css" rel="stylesheet" />
+<!-- Icomoon Icon Fonts-->
+<link href="~/css/layout/icomoon.css" rel="stylesheet" />
+<!-- Ion Icon Fonts-->
+<link href="~/css/layout/ionicons.min.css" rel="stylesheet" />
+<!-- Bootstrap  -->
+<link href="~/css/layout/bootstrap.min.css" rel="stylesheet" />
+
+<!-- Magnific Popup -->
+<link href="~/css/layout/magnific-popup.css" rel="stylesheet" />
+
+<!-- Flexslider  -->
+<link href="~/css/layout/flexslider.css" rel="stylesheet" />
+<!-- Owl Carousel -->
+<link href="~/css/layout/owl.carousel.min.css" rel="stylesheet" />
+<link href="~/css/layout/owl.theme.default.min.css" rel="stylesheet" />
+
+<!-- Date Picker -->
+<link href="~/css/layout/bootstrap-datepicker.css" rel="stylesheet" />
+<!-- Flaticons  -->
+<link href="~/css/layout/fontawesome/flaticon.css" rel="stylesheet" />
+<!-- Theme style  -->
+<link href="~/css/layout/style.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    .sale {
+        display: none;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+
+    aside#colorlib-hero {
+        display: none;
+    }
+
+    .colorlib-intro {
+        display: none;
+    }
+
+    .colorlib-product {
+        display: none;
+    }
+
+    .featured {
+        display: none;
+    }
+
+    .hienthisanpham {
+        margin-top: 50px;
+    }
+
+    .loc {
+        margin: 8px;
+        height: 40px;
+    }
+
+    .btn {
+        margin: 8px;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .product {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px;
+    }
+
+
+    .details {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .image-container {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        overflow: hidden;
+    }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .phan-tram-giam {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: red;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .price {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .tien-sale {
+        color: red;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .tien-goc {
+        color: #999;
+        text-decoration: line-through;
+        margin-right: 5px;
+    }
+</style>
+<div class="hienthisanpham">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-xl-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="side border mb-1">
+                            <h3><i class="fas fa-filter"></i> Bộ lọc tìm kiếm</h3>
+                            <input id="txt_Thuonghieusale" class="loc form-control" placeholder="Nhập thương hiệu" />
+
+                            <input id="txt_MauSacsale" class="loc form-control" placeholder="Nhập màu sắc" />
+
+                            <input id="txt_Sizesale" class="loc form-control" placeholder="Nhập size" />
+
+                            <input id="txt_LoaiSanPhamsale" class="loc form-control" placeholder="Nhập loại sản phẩm" />
+
+
+                            <button id="btn_timkiemsale" class="btn btn-primary" onclick="LocSanPhamSaleTheoMauSizeThuongHieuLoaiSanPham();">Áp dụng</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="side border mb-1">
+                            <h3>Khoảng giá</h3>
+                            <input id="txt_giaminsale" class="loc form-control" placeholder="Từ" />
+                            <input id="txt_giamaxsale" onchange="TruyenGiaTriMaxSale();" class="loc form-control" placeholder="Đến" />
+                            <button id="btn_timkiemsale1" class="btn btn-primary" onclick="LocTheoGiaCuaSanPhamSale();">Áp dụng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-xl-9">
+                <div class="timkiemsanpham" style="display:flex;">
+                    <input type="text" id="tukhoa" name="tukhoa" placeholder="Nhập tên sản phẩm " class="form-control" />
+                    <button class="btn" id="btn_timkiem" onclick="Timkiemsanpham();">
+                        <i class="fas fa-search" style="color: #005eff;font-size: 30px;margin-top: -8px;"></i>
+                    </button>
+                </div>
+                <div class="row" id="SanPhamSale">
+                    @*Hiển thị sản phẩm*@
+                </div>
+                <div class="row">
+                    <div class="col-md-5 text-center"></div>
+                    <div class="col-md-6 text-center">
+                        <div class="block-27">
+                            <ul id="phantrangsale" class="paginationsale">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery -->
+<script src="~/js/Layout/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<!-- jQuery easing -->
+<script src="~/js/layout/jquery.easing.1.3.js"></script>
+<script src="~/js/layout/magnific-popup-options.js"></script>
+<!-- Owl carousel -->
+<script src="~/js/layout/owl.carousel.min.js"></script>
+<!-- Magnific Popup -->
+<script src="~/js/layout/jquery.magnific-popup.min.js"></script>
+<script src="~/js/layout/magnific-popup-options.js"></script>
+<!-- Date Picker -->
+<script src="~/js/layout/bootstrap-datepicker.js"></script>
+<!-- Stellar Parallax -->
+<script src="~/js/layout/jquery.stellar.min.js"></script>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!-- popper -->
+<script src="~/js/Layout/popper.min.js"></script>
+<!-- bootstrap 4.1 -->
+<script src="~/js/Layout/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script src="~/js/Layout/jquery.waypoints.min.js"></script>
+<!-- Flexslider -->
+<script src="~/js/Layout/jquery.flexslider-min.js"></script>
+<!-- Main -->
+<script src="~/js/Layout/main.js"></script>
+<script src="~/js/Layout/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/layout/layout.js"></script>
+<script src="~/js/sale/sale.js"></script>
+<script type="text/javascript">
+    SanPhamSaleHK();
+</script>

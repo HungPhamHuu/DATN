@@ -1,0 +1,127 @@
+﻿@model AppData.Entities.ViewModels.VoucherDetailViewModel
+
+@{
+    ViewData["Title"] = "VoucherTheoIdVoucher";
+    Layout = "~/Areas/KhachHang/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    h4 {
+        font-family: emoji;
+    }
+
+    .box {
+        width: 500px;
+        margin: auto;
+        background-color: antiquewhite;
+        padding: 5px;
+        margin: auto;
+    }
+
+    .box-con {
+        margin: 5px;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+
+    .card-body {
+        margin-left: 35px;
+        text-align: left;
+    }
+    a.btn {
+        width: 100%;
+        height: 48px;
+        margin-top: 15px;
+        background-color: #ee4d2d;
+    }
+
+        a.btn:hover {
+            background-color: #fb7055;
+        }
+
+    .text {
+        font-weight:bold;
+        color: white;
+        text-align: center;
+        font-size: 20px;
+    }
+</style>
+<div class="box">
+    <div class="box-con">
+        <div class="row box-item">
+            <div class="col-md-4">
+                <img src="https://cf.shopee.vn/file/e6a3b7beffa95ca492926978d5235f79" style="background-color:#ee4d2d" />
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.MaVoucher</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="hansudung">
+            <h4>Hạn sử dụng mã </h4>
+            @Model.NgayBatDau - @Model.NgayKetThuc
+        </div>
+        <div class="uuDai">
+            <h4>Ưu đãi</h4>
+            Lượt sử dụng có hạn. Nhanh tay kẻo lỡ bạn nhé!Giảm @Model.GiaTriVoucher% Đơn Tối Thiểu ₫@Model.DieuKienMin Giảm tối đa ₫20k
+        </div>
+        <div class="apdungchosanpham">
+            <h4>Áp dụng cho sản phẩm</h4>
+            Áp dụng cho một số sản phẩm và người dùng nhất định trên Website.
+            <ul>
+                <li>Những sản phẩm bị hạn chế chạy khuyến mại theo quy định của Nhà nước sẽ không được hiển thị nếu nằm trong danh sách sản phẩm đã chọn.</li>
+            </ul>
+        </div>
+        <div class="thanhtoan">
+            <h4>Hình thức thanh toán</h4>
+            <p>Mọi hình thức thanh toán</p>
+        </div>
+        <div class="donvivanchuyen">
+            <h4>Đơn vị vận chuyển</h4>
+            <ul>
+                <li>Giao hàng nhanh</li>
+            </ul>
+        </div>
+        <div>
+            <h4> Xem chi tiết</h4>
+            Mã giảm @Model.GiaTriVoucher% tối đa 20000 đồng cho đơn hàng từ @Model.DieuKienMin đồng sử dụng trên ứng dụng Website. Số lượng mã giảm giá có hạn. Hạn sử dụng đến @Model.NgayKetThuc
+        </div>
+        <a class="btn" href="~/KhachHang/VoucherKH/DanhSachVoucherTheoKhachHang"><span class="text">Đồng ý</span></a>
+    </div>
+
+</div>
+
+
+
+<link href="~/css/layout/layout.css" rel="stylesheet" />
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var dropdownToggle = document.querySelector('.dropdown-toggle');
+        var dropdownMenu = document.querySelector('.dropdown-menu');
+
+        // Function to toggle dropdown menu visibility
+        function toggleDropdown() {
+            dropdownMenu.classList.toggle('show');
+        }
+
+        // Event listener to toggle dropdown menu visibility on button click
+        dropdownToggle.addEventListener('click', function () {
+            toggleDropdown();
+        });
+
+        // Event listener to hide dropdown menu when clicking outside of it
+        document.addEventListener('click', function (event) {
+            var targetElement = event.target;
+            if (!targetElement.matches('.dropdown-toggle')) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+    });
+</script>

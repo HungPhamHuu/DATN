@@ -1,0 +1,29 @@
+﻿@model AppData.Entities.Models.MauSac
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form action="~/Admin/MauSac/Update">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TenMauSac" class="control-label"></label>
+                @Html.TextBoxFor(m => m.TenMauSac, new { @class = "form-control" })
+                <span asp-validation-for="TenMauSac" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="~/Admin/MauSac/DanhSach">Quay lại</a>
+</div>
+

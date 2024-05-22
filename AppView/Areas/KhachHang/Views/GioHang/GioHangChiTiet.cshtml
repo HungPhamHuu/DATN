@@ -1,0 +1,355 @@
+@model IEnumerable<AppData.Entities.ViewModels.GioHangCTVM.GioHangCTVM>
+@using Microsoft.AspNetCore.Http;
+@using AppData.Session;
+@using AppData.Entities.ViewModels;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpAccess
+
+@{
+    ViewData["Title"] = "GioHangChiTiet";
+    List<ThanhPho> provinces = httpAccess.HttpContext.Session.Get<List<ThanhPho>>("ThanhPho");
+    Layout = "~/Areas/KhachHang/Views/Shared/_Layout.cshtml";
+    var stt = 0;
+ 
+
+}
+<link href="~/css/layout/layout.css" rel="stylesheet" asp-append-version="true" />
+<!-- Bootstrap  -->
+<link href="~/css/Layout/bootstrap.min.css" rel="stylesheet" />
+
+<!-- Theme style  -->
+<link href="~/css/GioHang/select2.min.css" rel="stylesheet" />
+<link href="~/css/GioHang/select2-bootstrap4.min.css" rel="stylesheet" />
+<link href="~/css/GioHang/giohang.css" rel="stylesheet" />
+<link href="~/css/Layout/style.css" rel="stylesheet" />
+
+<div class="colorlib-loader"></div>
+<style>
+    .Thongtindonhang {
+        margin-top: 40px;
+    }
+
+    div#lstVoucher {
+        display: none;
+    }
+
+    button#GiamSoLuong, button#TangSoLuong {
+        border: none;
+        background: white;
+        font-size: 24px;
+    }
+
+    #btn_online:hover {
+        background-color: black;
+        color: white;
+    }
+
+    i.fas.fa-shopping-cart {
+        margin-left: 3px;
+        margin-top: -55%;
+    }
+
+    p#soluongtrongiohang {
+        margin-left: -9px;
+        margin-top: -54%;
+        height: 15px;
+        font-size: 11px;
+    }
+
+    .form-control {
+        font-size: 20px !important;
+    }
+
+    .menulstthongtin {
+        top: 43px;
+        width: 200px;
+        left: -100px;
+    }
+
+    .suggestionList {
+        position: absolute;
+        z-index: 1;
+    }
+
+    .suggestionList {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: white;
+    }
+
+        .suggestionList li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+            .suggestionList li:hover {
+                background-color: #f4f4f4;
+            }
+
+</style>
+
+<div id="page">
+    <div class="Thongtindonhang">
+        <div class="row">
+            <div class="row-pb-lg">
+                <div class="row">
+                    <div class="col-md-7">
+                        <form action="#" class="frmThongTinVanChuyen">
+                            <h3>Thông tin vận chuyển</h3>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <input id="name" type="text" class="name form-control" placeholder="Họ và tên" onblur="validateName();" />
+                                    <span id="errorten" style="color:red;"></span>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <input id="sdt" type="tel" class="sdt form-control" name="sdt" placeholder="Số điện thoại" onblur="validateSDT();" />
+                                    <span id="errorsdt" style="color:red;"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <input id="email" type="email" class="email form-control" placeholder="Email" onblur="validateEmail();" />
+                                    <span id="erroremail" style="color:red;"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <input id="diachi" type="text" class="diachi form-control" placeholder="Địa chỉ" onblur="validatediachi1();" />
+                                    <span id="errorDiaChi" style="color:red;"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        <select id="provinceList" class="form-control select2bs4" style="width: 100%;" onchange="ChonThanhPho();">
+                                            <option value="">Chọn Tỉnh/Thành phố </option>
+                                            @if (provinces != null)
+                                            {
+                                                foreach (var province in provinces)
+                                                {
+                                                    <option value="@province.ProvinceID" data-url="@Url.Action("NhanIDTinh", "GioHang", new { IdThanhPho = province.ProvinceID })">@province.ProvinceName</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                <div class="col-md-4">
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        <select id="districtList" class="form-control select2bs4" style="width: 100%;" onchange="ChonHuyen();">
+                                            <option selected="selected">Chọn Quận/Huyện</option>
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                <div class="col-md-4">
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        <select id="wardList" class="form-control select2bs4" style="width: 100%;" onchange="ChonPhuong();">
+                                            <option selected="selected">Chọn Xã/Phường</option>
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <textarea id="w3review" name="w3review" rows="5" cols="126" placeholder="Ghi chú"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                        <br />
+                        <form action="" id="HinhThucThanhToan" class="HinhThucThanhToan">
+                        </form>
+                    </div>
+                    <div class="col-md-5 cartDetail">
+                        <div class="product-name d-flex">
+                            <div class="one-forth text-left px-4">
+                                <span>Sản phẩm</span>
+                            </div>
+                            <div class="one-eight text-center">
+                            </div>
+                            <div class="one-eight text-center">
+                                <span>Giá</span>
+                            </div>
+                            <div class="one-eight text-center">
+                                <span>Số lượng</span>
+                            </div>
+                            <div class="one-eight text-center">
+                                <span>Tổng tiền</span>
+                            </div>
+                            <div class="one-eight text-center">
+                            </div>
+                        </div>
+                        <div id="danhSachsanpham">
+
+                        </div>
+                       @* @foreach (var item in Model)
+                        {
+                            <div class="product-cart d-flex">
+                                <div class="one-forth">
+                                    <div class="product-img" style="background-image: url();">
+                                    </div>
+                                    <div class="display-tc">
+                                        <h3 id="tensanpham">@item.TenSP</h3>
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <div class="mausac">
+                                            Màu sắc: <span id="MauSac">@item.MauSac</span>
+                                        </div>
+                                        <br>
+                                        <div class="droplst-size" >
+                                            <select id="droplst-size">
+
+                                            </select>
+                                        </div>
+
+                                        @Html.ActionLink("Xóa", "DeleteCartDetail","GioHangChiTiet", new { Id = item.ID })
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <span class="price">@item.Gia.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</span>
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <form action="#">
+                                            <input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="@item.SoLuong" min="1" max="100" />
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <span class="price">@item.ThanhTien.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</span>
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        @Html.ActionLink("Xóa", "DeleteCartDetail","GioHangChiTiet", new { Id = item.ID })
+                                    </div>
+                                </div>
+                            </div>
+                        }*@
+
+                        <div>
+                            <form action="#">
+                                <div class="row form-group" style="display: flex;">
+                                    <div class="col-sm-9">
+                                        <input type="text" id="magiamgia" name="magiamgia" oninput="suggestVoucher(event);" class="form-control input-number" placeholder="Nhập mã giảm giá...">
+                                        <ul class="suggestionList" id="suggestionListVoucher" style="top: 102%;left: 3%;width: 84%;"></ul>
+                                        <span id="idvoucher" style="display:none;"></span>
+                                        <span id="errorvoucher" style="color:red;"></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="submit" id="applyCoupon"  onclick="ApDungVoucher(event);" value="Sử dụng" class="btn btn-primary applyCoupon">
+                                        
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="total-wrap total">
+                            <div class="sub">
+                                <p class="row"><span class="col-md-8">Tổng tiền:</span> <span class="col-md-4" style="padding-left: 30px;"><strong id="tongtien"></strong></span></p>
+                                <p class="row"><span class="col-md-8">Tiền vận chuyển:</span> <span id="tienship" class="col-md-4" style="padding-left: 30px;"> <strong id="tienship"></strong></span></p>
+                                <p class="row"><span class="col-md-8">Giảm giá:</span> <span class="col-md-4" style="padding-left: 30px;"> <strong id="phantramgiamgia"></strong></span></p>
+                                <p class="row"><span class="col-md-8">Tiền giảm giá:</span> <span class="col-md-4" style="padding-left: 30px;"> <strong id="tiemgiamgia"></strong></span></p>
+                            </div>
+                            <div class="grand-total">
+                                <p class="row"><span class="col-md-8"><strong>Thành tiền:</strong></span> <span class="col-md-4" style="padding-left: 30px;"><strong id="thanhtien"></strong></span></p>
+                            </div>
+                        </div>
+                        <button id="btnThanhToan" onclick="TaoHoaDon();">Thanh toán</button>
+                        <button id="btn_online" class="btn" style=" width: 100%;text-align: center; background-color: #616161;color: white;height: 50px;border-radius: 10px;">
+                            <a href="/KhachHang/GioHang/ThanhToanOnLine" id="btnThanhToan paymentLink" style="color: white; margin: auto;font-size: 20px;">Thanh toán</a>
+                        </button>
+                       
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="row-pb-lg">
+                <div class="row">
+                    <div class="col-md-7"></div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="total-wrap">
+                    <div class="row">
+                        <div class="col-sm-8">
+                        </div>
+                        <div class="col-sm-4 text-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script type="text/javascript" src="~/js/giohang/jquery.min.js"></script>
+
+<!-- bootstrap 4.1 -->
+<script type="text/javascript" src="~/js/layout/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script type="text/javascript" src="~/js/layout/jquery.waypoints.min.js"></script>
+<!-- Flexslider -->
+<script type="text/javascript" src="~/js/layout/jquery.flexslider-min.js"></script>
+<!-- Main -->
+<script type="text/javascript" src="~/js/giohang/bootstrap.bundle.min.js"></script>
+<script src="~/js/giohang/select2.full.min.js"></script>
+
+<script type="text/javascript" src="~/js/layout/main.js"></script>
+<script type="text/javascript" src="~/js/giohang/giohang.js"></script>
+<script>
+    DanhSachHinhThucJson();
+    document.getElementById('btn_online').style.display = 'none'
+    LoadGioHangChiTiet();
+    ThongTinCaNhan();
+    $(function () {
+        //Initialize Select2 Elements
+        // $('.select2').select2()
+
+        // //Initialize Select2 Elements
+        // $('.select2bs4').select2({
+        //     theme: 'bootstrap4'
+        // })
+    });
+    function ThongTinCaNhan() {
+        $.ajax({
+            url: '/KhachHang/ThongTinCaNhan/ThongTinCaNhanJson',
+            type: 'GET',
+            success: function (result) {
+                console.log(result);
+                // Gán chuỗi có định dạng hợp lệ vào trường nhập dạng date
+                document.getElementById("name").value = result.tenNguoiDung;
+                //document.getElementById("ten").innerText = result.tenNguoiDung;
+                //document.getElementById("idnguoidung").innerText = result.id;
+                //document.getElementById("NgaySinh").value = result.ngaySinh;
+                document.getElementById("sdt").value = result.sdt;
+                document.getElementById("email").value = result.email;
+                document.getElementById("diachi").value = result.diaChi;
+
+                console.log(result);
+            },
+            error: function (xhr, status, error) {
+                alert('Lỗi: ', error);
+            }
+        });
+    };
+</script>
+
+

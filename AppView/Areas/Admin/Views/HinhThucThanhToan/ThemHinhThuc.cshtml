@@ -1,0 +1,49 @@
+﻿@model AppData.Entities.Models.ThanhToan
+
+@{
+    ViewData["Title"] = "ThemHinhThuc";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ThemHinhThuc</h1>
+
+<h4>ThanhToan</h4>
+<hr />
+<div class="">
+    <div class="">
+        <form asp-action="ThemHinhThuc">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="display:none;">
+                <label asp-for="ID" class="control-label"></label>
+                <input asp-for="ID" class="form-control" />
+                <span asp-validation-for="ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label for="HinhThucThanhToan" class="control-label col-md-3">Tên hình thức thanh toán</label>
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.HinhThucThanhToan, new { @class = "form-control" })
+                    <span asp-validation-for="HinhThucThanhToan" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="form-group" style="display:none;">
+                <label asp-for="TrangThai" class="control-label"></label>
+                <input asp-for="TrangThai" class="form-control" />
+                <span asp-validation-for="TrangThai" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
